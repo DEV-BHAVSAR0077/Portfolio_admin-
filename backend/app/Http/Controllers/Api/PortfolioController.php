@@ -33,6 +33,7 @@ class PortfolioController extends BaseController
             'testimonials' => Testimonial::where('is_active', true)->orderBy('display_order')->get(),
             'social_media' => SocialMedia::where('is_active', true)->orderBy('display_order')->get(),
             'settings' => GlobalSetting::first(),
+            'skill_section' => \App\Models\SkillSection::first(),
         ];
 
         return $this->sendResponse($data, 'Portfolio data retrieved successfully.');

@@ -21,7 +21,7 @@ export default async function Home() {
     <div className="w-full flex flex-col">
       <HeroSection data={data.home} />
       <AboutSection data={data.about} />
-      <SkillsSection data={data.skills} />
+      <SkillsSection data={data.skills} sectionData={data.skill_section} />
       <ExperienceSection data={data.experiences} education={data.education} />
       <ProjectsSection data={data.projects} />
       <ServicesSection data={data.services} />

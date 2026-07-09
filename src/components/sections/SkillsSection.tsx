@@ -38,11 +38,14 @@ const skillCategories = [
   }
 ];
 
-export function SkillsSection({ data }: { data?: any }) {
+export function SkillsSection({ data, sectionData }: { data?: any, sectionData?: any }) {
   const containerRef = useRef<HTMLElement>(null);
   
-  // Group skills by category
+  // Group skills by category or use custom cards
   const groupedSkills = useMemo(() => {
+    if (sectionData?.cards && Array.isArray(sectionData.cards) && sectionData.cards.length > 0) {
+      return sectionData.cards;
+    }
     if (!data || !Array.isArray(data) || data.length === 0) {
       return skillCategories; // Fallback
     }
@@ -56,7 +59,7 @@ export function SkillsSection({ data }: { data?: any }) {
       title: key,
       skills: groups[key]
     }));
-  }, [data]);
+  }, [data, sectionData]);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -64,6 +67,8 @@ export function SkillsSection({ data }: { data?: any }) {
   });
 
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+
+  const subtitle = sectionData?.subtitle || "A comprehensive overview of my technical skills, tools, and expertise across the modern software development stack.";
 
   return (
     <section id="skills" ref={containerRef} className="relative py-12 md:py-16 overflow-hidden">
@@ -80,8 +85,8 @@ export function SkillsSection({ data }: { data?: any }) {
           <h2 className="text-3xl md:text-5xl font-heading font-bold text-foreground mb-4">
             Technical <span className="text-gradient">Arsenal</span>
           </h2>
-          <p className="text-muted-foreground text-lg">
-            A comprehensive overview of my technical skills, tools, and expertise across the modern software development stack.
+          <p className="text-muted-foreground text-lg whitespace-pre-wrap">
+            {subtitle}
           </p>
         </motion.div>
 
