@@ -16,10 +16,10 @@ use Filament\Tables\Table;
 
 class SocialMediaResource extends Resource
 {
-    protected static string|\UnitEnum|null $navigationGroup = 'Contact';
+    protected static \UnitEnum|string|null $navigationGroup = 'Contact';
     protected static ?string $model = SocialMedia::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static \BackedEnum|string|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     public static function form(Schema $schema): Schema
     {

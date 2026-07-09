@@ -16,10 +16,10 @@ use Filament\Tables\Table;
 
 class AchievementResource extends Resource
 {
-    protected static string|\UnitEnum|null $navigationGroup = 'Skills';
+    protected static \UnitEnum|string|null $navigationGroup = 'Skills';
     protected static ?string $model = Achievement::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static \BackedEnum|string|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'title';
 

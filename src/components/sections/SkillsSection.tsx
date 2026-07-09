@@ -66,7 +66,7 @@ export function SkillsSection({ data }: { data?: any }) {
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
   return (
-    <section id="skills" ref={containerRef} className="relative py-24 md:py-32 overflow-hidden">
+    <section id="skills" ref={containerRef} className="relative py-12 md:py-16 overflow-hidden">
       <div className="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-white/5 to-transparent" />
       
       <div className="container mx-auto px-4 md:px-6 relative z-10">

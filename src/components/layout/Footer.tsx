@@ -42,12 +42,12 @@ export function Footer({ settings, socialMedia }: { settings?: any, socialMedia?
               {socials.map((social, idx) => {
                 const IconComponent = getSocialIcon(social.platform);
                 return (
-                  <a key={idx} href={social.url} target="_blank" rel="noreferrer" className="p-2 rounded-full bg-foreground/5 hover:bg-foreground/10 text-foreground transition-colors">
+                  <a key={idx} href={(social.url?.includes('@') && !social.url?.startsWith('http')) ? `https://mail.google.com/mail/?view=cm&fs=1&to=${social.url.replace('mailto:', '')}` : social.url} target="_blank" rel="noreferrer" className="p-2 rounded-full bg-foreground/5 hover:bg-foreground/10 text-foreground transition-colors">
                     <IconComponent size={20} />
                   </a>
                 );
               })}
-              <a href={`mailto:${settings?.contact_email || 'contact@devbhavsar.com'}`} className="p-2 rounded-full bg-foreground/5 hover:bg-foreground/10 text-foreground transition-colors">
+              <a href={`https://mail.google.com/mail/?view=cm&fs=1&to=${settings?.contact_email || 'contact@devbhavsar.com'}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-foreground/5 hover:bg-foreground/10 text-foreground transition-colors">
                 <Mail size={20} />
               </a>
             </div>

@@ -21,7 +21,7 @@ class HomePageSettings extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Home';
+    protected static \UnitEnum|string|null $navigationGroup = 'Home';
     protected string $view = 'filament.pages.settings.home-page-settings';
     
     public ?array $data = [];
@@ -94,7 +94,6 @@ class HomePageSettings extends Page implements HasForms
                                     ->required(),
                                 TextInput::make('href')
                                     ->label('URL')
-                                    ->url()
                                     ->required(),
                             ])
                             ->columns(2)

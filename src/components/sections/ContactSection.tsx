@@ -96,7 +96,7 @@ export function ContactSection({ settings, socialMedia }: { settings?: any, soci
                 </div>
                 <div>
                   <h4 className="text-foreground font-medium mb-1">Email</h4>
-                  <a href={`mailto:${settings?.contact_email || 'contact@devbhavsar.com'}`} className="text-muted-foreground hover:text-primary-accent transition-colors">
+                  <a href={`https://mail.google.com/mail/?view=cm&fs=1&to=${settings?.contact_email || 'contact@devbhavsar.com'}`} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary-accent transition-colors">
                     {settings?.contact_email || 'contact@devbhavsar.com'}
                   </a>
                 </div>

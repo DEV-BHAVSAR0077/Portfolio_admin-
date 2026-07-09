@@ -16,10 +16,10 @@ use Filament\Tables\Table;
 
 class CertificateResource extends Resource
 {
-    protected static string|\UnitEnum|null $navigationGroup = 'About';
+    protected static \UnitEnum|string|null $navigationGroup = 'About';
     protected static ?string $model = Certificate::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static \BackedEnum|string|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'name';
 

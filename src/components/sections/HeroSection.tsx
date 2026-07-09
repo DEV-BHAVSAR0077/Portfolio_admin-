@@ -24,7 +24,7 @@ export function HeroSection({ data }: { data?: any }) {
     { icon: 'Terminal', href: "https://github.com/devbhavsar0077" },
     { icon: 'Briefcase', href: "https://linkedin.com/in/devbhavsar" },
     { icon: 'Hash', href: "https://twitter.com/devbhavsar" },
-    { icon: 'Mail', href: "mailto:contact@devbhavsar.com" },
+    { icon: 'Mail', href: "https://mail.google.com/mail/?view=cm&fs=1&to=contact@devbhavsar.com" },
   ];
 
   const statistics = data?.statistics || [
@@ -148,7 +148,7 @@ export function HeroSection({ data }: { data?: any }) {
               return (
                 <a
                   key={i}
-                  href={social.href}
+                  href={(social.href?.includes('@') && !social.href?.startsWith('http')) ? `https://mail.google.com/mail/?view=cm&fs=1&to=${social.href.replace('mailto:', '')}` : social.href}
                   target="_blank"
                   rel="noreferrer"
                   className="p-3 rounded-full bg-foreground/5 border border-foreground/10 text-muted-foreground hover:text-primary-accent hover:border-primary-accent/50 hover:bg-primary-accent/10 transition-all duration-300"

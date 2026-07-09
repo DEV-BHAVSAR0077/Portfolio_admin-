@@ -11,5 +11,6 @@ class AboutSection extends Model
     protected $casts = [
         'timeline' => 'array',
         'personal_interests' => 'array',
+        'about_cards' => 'array',
     ];
 }

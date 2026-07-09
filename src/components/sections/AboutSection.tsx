@@ -2,7 +2,23 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Code2, BrainCircuit, Rocket, Target, Heart, Zap, BookOpen } from "lucide-react";
+import { Code2, BrainCircuit, Target, Heart, Zap, BookOpen, Star, Lightbulb, Briefcase, Terminal, Cpu } from "lucide-react";
+
+function getIconConfig(title: string) {
+  if (!title) return { Icon: Star, color: "text-primary-accent", bg: "bg-primary-accent" };
+  const t = title.toLowerCase();
+  if (t.includes('biography') || t.includes('about')) return { Icon: BrainCircuit, color: "text-primary-accent", bg: "bg-primary-accent" };
+  if (t.includes('mission') || t.includes('vision') || t.includes('goal')) return { Icon: Target, color: "text-secondary-accent", bg: "bg-secondary-accent" };
+  if (t.includes('philosoph') || t.includes('heart') || t.includes('value')) return { Icon: Heart, color: "text-success", bg: "bg-success" };
+  if (t.includes('focus') || t.includes('now') || t.includes('current')) return { Icon: Zap, color: "text-primary-accent", bg: "bg-primary-accent" };
+  if (t.includes('learn') || t.includes('book') || t.includes('study')) return { Icon: BookOpen, color: "text-secondary-accent", bg: "bg-secondary-accent" };
+  if (t.includes('interest') || t.includes('hobby') || t.includes('personal')) return { Icon: Code2, color: "text-success", bg: "bg-success" };
+  if (t.includes('work') || t.includes('experience')) return { Icon: Briefcase, color: "text-primary-accent", bg: "bg-primary-accent" };
+  if (t.includes('tech') || t.includes('code') || t.includes('dev')) return { Icon: Terminal, color: "text-secondary-accent", bg: "bg-secondary-accent" };
+  if (t.includes('ai') || t.includes('machine') || t.includes('data')) return { Icon: Cpu, color: "text-success", bg: "bg-success" };
+  if (t.includes('idea') || t.includes('think')) return { Icon: Lightbulb, color: "text-primary-accent", bg: "bg-primary-accent" };
+  return { Icon: Star, color: "text-primary-accent", bg: "bg-primary-accent" };
+}
 
 export function AboutSection({ data }: { data?: any }) {
   const sectionRef = useRef<HTMLElement>(null);
@@ -14,42 +30,70 @@ export function AboutSection({ data }: { data?: any }) {
   const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
-  // Fallbacks
-  const biography = data?.biography || "I am an AI/ML Engineer and Full Stack Developer passionate about creating intelligent software that solves real-world problems. I specialize in AI-powered applications, SaaS platforms, automation systems, and scalable web technologies. I enjoy transforming ideas into production-ready products with beautiful user experiences.";
-  const mission = data?.mission || "To democratize access to powerful AI tools by building intuitive interfaces, and to envision a future where intelligent automation empowers human creativity.";
-  const workPhilosophy = data?.work_philosophy || "Clean code, user-centric design, and continuous learning. I believe the best products emerge from a deep empathy for the end-user.";
-  
-  // Try parsing JSON if they come as strings
-  const parseJson = (val: any, fallback: any[]) => {
-    if (!val) return fallback;
-    if (Array.isArray(val)) return val;
-    try {
-      return JSON.parse(val);
-    } catch {
-      return fallback;
+  // Fallback defaults if no cards exist
+  const defaultCards = [
+    {
+      title: "Professional Biography",
+      type: "text",
+      width: "full",
+      content_text: data?.biography || "I am an AI/ML Engineer and Full Stack Developer passionate about creating intelligent software that solves real-world problems. I specialize in AI-powered applications, SaaS platforms, automation systems, and scalable web technologies. I enjoy transforming ideas into production-ready products with beautiful user experiences."
+    },
+    {
+      title: "Mission & Vision",
+      type: "text",
+      width: "half",
+      content_text: data?.mission || "To democratize access to powerful AI tools by building intuitive interfaces, and to envision a future where intelligent automation empowers human creativity."
+    },
+    {
+      title: "Work Philosophy",
+      type: "text",
+      width: "half",
+      content_text: data?.work_philosophy || "Clean code, user-centric design, and continuous learning. I believe the best products emerge from a deep empathy for the end-user."
+    },
+    {
+      title: "Current Focus",
+      type: "bullets",
+      width: "full",
+      content_bullets: Array.isArray(data?.current_focus) ? data.current_focus.map((t: string) => ({ text: t })) : [
+        { text: "Architecting scalable LLM applications" },
+        { text: "Optimizing Full-Stack SaaS platforms" },
+        { text: "Building intelligent automation agents" },
+        { text: "Refining modern UI/UX design systems" }
+      ]
+    },
+    {
+      title: "What I'm Learning",
+      type: "bullets",
+      width: "full",
+      content_bullets: Array.isArray(data?.learning) ? data.learning.map((t: string) => ({ text: t })) : [
+        { text: "Advanced RAG Techniques & Vector DBs" },
+        { text: "Three.js & WebGL for immersive web" },
+        { text: "Distributed Systems & Cloud Architecture" },
+        { text: "Generative UI with AI Models" }
+      ]
+    },
+    {
+      title: "Personal Interests",
+      type: "pills",
+      width: "full",
+      content_pills: Array.isArray(data?.personal_interests) ? data.personal_interests : [
+        "Open Source", "Hackathons", "Writing Tech Blogs", "Sci-Fi Books", "UI Design"
+      ]
     }
-  };
+  ];
 
-  const currentFocus = parseJson(data?.current_focus, [
-    "Architecting scalable LLM applications",
-    "Optimizing Full-Stack SaaS platforms",
-    "Building intelligent automation agents",
-    "Refining modern UI/UX design systems"
-  ]);
+  const cards = (data?.about_cards && Array.isArray(data.about_cards) && data.about_cards.length > 0) 
+    ? data.about_cards 
+    : defaultCards;
 
-  const learning = parseJson(data?.learning, [
-    "Advanced RAG Techniques & Vector DBs",
-    "Three.js & WebGL for immersive web",
-    "Distributed Systems & Cloud Architecture",
-    "Generative UI with AI Models"
-  ]);
-
-  const personalInterests = parseJson(data?.personal_interests, [
-    "Open Source", "Hackathons", "Writing Tech Blogs", "Sci-Fi Books", "UI Design"
-  ]);
+  // Split cards exactly as the original layout: first half on the left, second half on the right.
+  // 6 cards = 3 left, 3 right.
+  const midIndex = Math.ceil(cards.length / 2);
+  const leftCards = cards.slice(0, midIndex);
+  const rightCards = cards.slice(midIndex);
 
   return (
-    <section id="about" ref={sectionRef} className="relative py-24 md:py-32 overflow-hidden">
+    <section id="about" ref={sectionRef} className="relative py-12 md:py-16 overflow-hidden">
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -65,94 +109,104 @@ export function AboutSection({ data }: { data?: any }) {
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
-          {/* Biography & Mission */}
+          {/* Left Column (Biography, Mission, Philosophy) */}
           <motion.div
             style={{ y, opacity }}
-            className="lg:col-span-7 space-y-8"
+            className="lg:col-span-7 columns-1 md:columns-2 gap-8 self-start"
           >
-            <div className="glass-panel p-8 md:p-10 rounded-3xl relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <BrainCircuit className="w-12 h-12 text-primary-accent mb-6" />
-              <h3 className="text-2xl font-heading font-bold text-foreground mb-4">Professional Biography</h3>
-              <p className="text-muted-foreground leading-relaxed text-lg">
-                {biography}
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="glass-panel p-8 rounded-3xl">
-                <Target className="w-8 h-8 text-secondary-accent mb-4" />
-                <h3 className="text-xl font-heading font-bold text-foreground mb-3">Mission & Vision</h3>
-                <p className="text-muted-foreground">
-                  {mission}
-                </p>
-              </div>
-              <div className="glass-panel p-8 rounded-3xl">
-                <Heart className="w-8 h-8 text-success mb-4" />
-                <h3 className="text-xl font-heading font-bold text-foreground mb-3">Work Philosophy</h3>
-                <p className="text-muted-foreground">
-                  {workPhilosophy}
-                </p>
-              </div>
-            </div>
+            {leftCards.map((card: any, i: number) => {
+              const { Icon, color } = getIconConfig(card.title);
+              const isHalf = card.width === 'half';
+              return (
+                <div key={i} className={`break-inside-avoid mb-8 ${isHalf ? '' : '[column-span:all]'}`}>
+                  <div className={`glass-panel ${isHalf ? 'p-8' : 'p-8 md:p-10'} rounded-3xl relative overflow-hidden group h-full`}>
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    
+                    <Icon className={`${isHalf ? 'w-8 h-8' : 'w-12 h-12'} ${color} mb-${isHalf ? '4' : '6'}`} />
+                    <h3 className={`${isHalf ? 'text-xl' : 'text-2xl'} font-heading font-bold text-foreground mb-${isHalf ? '3' : '4'}`}>{card.title}</h3>
+                    
+                    {card.type === 'text' && (
+                      <p className={`text-muted-foreground ${!isHalf ? 'leading-relaxed text-lg' : ''} whitespace-pre-wrap`}>
+                        {card.content_text}
+                      </p>
+                    )}
+                    {card.type === 'bullets' && card.content_bullets && (
+                      <ul className="space-y-4 mt-4">
+                        {card.content_bullets.map((bullet: any, idx: number) => (
+                          <li key={idx} className="flex items-start gap-3">
+                            <span className={`w-2 h-2 rounded-full ${color.replace('text-', 'bg-')} mt-2 shrink-0`} />
+                            <span className="text-muted-foreground">{typeof bullet === 'string' ? bullet : bullet.text}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {card.type === 'pills' && card.content_pills && (
+                      <div className="flex flex-wrap gap-2 mt-4">
+                        {card.content_pills.map((pill: string, idx: number) => (
+                          <span key={idx} className="px-3 py-1 rounded-full bg-foreground/10 text-sm text-foreground/80 border border-foreground/5">
+                            {pill}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
           </motion.div>
 
-          {/* Current Focus & Learning */}
+          {/* Right Column (Focus, Learning, Interests) */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
-            className="lg:col-span-5 space-y-8"
+            className="lg:col-span-5 grid grid-cols-1 gap-8 h-max self-start content-start"
           >
-            <div className="glass-panel p-8 rounded-3xl border border-foreground/10 bg-foreground/5 relative overflow-hidden">
-              <div className="absolute -right-10 -top-10 w-40 h-40 bg-primary-accent/20 rounded-full blur-[60px]" />
-              <h3 className="text-2xl font-heading font-bold text-foreground mb-6 flex items-center gap-3">
-                <Zap className="text-primary-accent" />
-                Current Focus
-              </h3>
-              <ul className="space-y-4">
-                {currentFocus.map((item: string, i: number) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <span className="w-2 h-2 rounded-full bg-primary-accent mt-2 shrink-0" />
-                    <span className="text-muted-foreground">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {rightCards.map((card: any, i: number) => {
+              const { Icon, color, bg } = getIconConfig(card.title);
+              return (
+                <div key={i} className="col-span-1">
+                  <div className="glass-panel p-8 rounded-3xl border border-foreground/10 bg-foreground/5 relative overflow-hidden">
+                    <div className={`absolute -right-10 -top-10 w-40 h-40 ${bg}/20 rounded-full blur-[60px]`} />
+                    
+                    <h3 className="text-2xl font-heading font-bold text-foreground mb-6 flex items-center gap-3">
+                      <Icon className={`${color} w-6 h-6`} />
+                      {card.title}
+                    </h3>
 
-            <div className="glass-panel p-8 rounded-3xl border border-foreground/10 bg-foreground/5 relative overflow-hidden">
-              <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-secondary-accent/20 rounded-full blur-[60px]" />
-              <h3 className="text-2xl font-heading font-bold text-foreground mb-6 flex items-center gap-3">
-                <BookOpen className="text-secondary-accent" />
-                What I'm Learning
-              </h3>
-              <ul className="space-y-4">
-                {learning.map((item: string, i: number) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <span className="w-2 h-2 rounded-full bg-secondary-accent mt-2 shrink-0" />
-                    <span className="text-muted-foreground">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            
-            <div className="glass-panel p-8 rounded-3xl border border-foreground/10 bg-foreground/5">
-              <h3 className="text-xl font-heading font-bold text-foreground mb-4 flex items-center gap-3">
-                <Code2 className="text-success" />
-                Personal Interests
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {personalInterests.map((interest: string, i: number) => (
-                  <span key={i} className="px-3 py-1 rounded-full bg-foreground/10 text-sm text-foreground/80 border border-foreground/5">
-                    {interest}
-                  </span>
-                ))}
-              </div>
-            </div>
+                    {card.type === 'text' && (
+                      <p className="text-muted-foreground whitespace-pre-wrap">
+                        {card.content_text}
+                      </p>
+                    )}
+                    {card.type === 'bullets' && card.content_bullets && (
+                      <ul className="space-y-4">
+                        {card.content_bullets.map((bullet: any, idx: number) => (
+                          <li key={idx} className="flex items-start gap-3">
+                            <span className={`w-2 h-2 rounded-full ${bg} mt-2 shrink-0`} />
+                            <span className="text-muted-foreground">{typeof bullet === 'string' ? bullet : bullet.text}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {card.type === 'pills' && card.content_pills && (
+                      <div className="flex flex-wrap gap-2">
+                        {card.content_pills.map((pill: string, idx: number) => (
+                          <span key={idx} className="px-3 py-1 rounded-full bg-foreground/10 text-sm text-foreground/80 border border-foreground/5">
+                            {pill}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
           </motion.div>
         </div>
       </div>
     </section>
   );
 }
+

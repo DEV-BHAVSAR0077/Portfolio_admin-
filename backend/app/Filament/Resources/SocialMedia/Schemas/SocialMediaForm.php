@@ -15,7 +15,6 @@ class SocialMediaForm
                 TextInput::make('platform')
                     ->required(),
                 TextInput::make('url')
-                    ->url()
                     ->required(),
                 TextInput::make('icon'),
                 TextInput::make('color'),

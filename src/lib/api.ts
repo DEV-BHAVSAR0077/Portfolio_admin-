@@ -1,5 +1,5 @@
 export async function fetchPortfolioData() {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api';
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8001/api';
   const apiToken = process.env.CMS_API_TOKEN;
 
   try {
@@ -27,11 +27,11 @@ export async function fetchPortfolioData() {
 export function getImageUrl(path: string | null) {
   if (!path) return null;
   if (path.startsWith('http')) return path;
-  const storageUrl = process.env.NEXT_PUBLIC_STORAGE_URL || 'http://127.0.0.1:8000/storage';
+  const storageUrl = process.env.NEXT_PUBLIC_STORAGE_URL || 'http://127.0.0.1:8001/storage';
   return `${storageUrl}/${path}`;
 }
 
 export function getResumeDownloadUrl() {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api';
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8001/api';
   return `${apiUrl}/resume/download`;
 }
