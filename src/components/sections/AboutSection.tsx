@@ -112,13 +112,13 @@ export function AboutSection({ data }: { data?: any }) {
           {/* Left Column (Biography, Mission, Philosophy) */}
           <motion.div
             style={{ y, opacity }}
-            className="lg:col-span-7 columns-1 md:columns-2 gap-8 self-start"
+            className="lg:col-span-7 flex flex-wrap gap-8 self-start content-start"
           >
             {leftCards.map((card: any, i: number) => {
               const { Icon, color } = getIconConfig(card.title);
               const isHalf = card.width === 'half';
               return (
-                <div key={i} className={`break-inside-avoid mb-8 ${isHalf ? '' : '[column-span:all]'}`}>
+                <div key={i} className={`${isHalf ? 'w-full md:w-[calc(50%-1rem)] flex-grow' : 'w-full'}`}>
                   <div className={`glass-panel ${isHalf ? 'p-8' : 'p-8 md:p-10'} rounded-3xl relative overflow-hidden group h-full`}>
                     <div className="absolute inset-0 bg-gradient-to-br from-primary-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     
