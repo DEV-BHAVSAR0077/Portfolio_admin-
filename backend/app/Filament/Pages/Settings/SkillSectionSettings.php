@@ -26,6 +26,8 @@ class SkillSectionSettings extends Page implements HasForms
     
     public function mount(): void
     {
+        SkillSection::syncFromSkills();
+        
         $skillSection = SkillSection::first();
         if ($skillSection) {
             $this->form->fill($skillSection->toArray());
@@ -88,6 +90,8 @@ class SkillSectionSettings extends Page implements HasForms
         } else {
             SkillSection::create($data);
         }
+        
+        SkillSection::syncToSkills($data['cards'] ?? []);
         
         Notification::make()
             ->title('Saved successfully')

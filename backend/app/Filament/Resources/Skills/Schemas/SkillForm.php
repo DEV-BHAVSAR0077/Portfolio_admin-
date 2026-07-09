@@ -16,20 +16,31 @@ class SkillForm
                 TextInput::make('name')
                     ->required(),
                 TextInput::make('category'),
-                TextInput::make('percentage')
-                    ->required()
-                    ->numeric()
-                    ->default(0),
-                TextInput::make('icon'),
-                TextInput::make('color'),
+                \Filament\Forms\Components\Select::make('color')
+                    ->options([
+                        'red' => 'Red',
+                        'blue' => 'Blue',
+                        'green' => 'Green',
+                        'purple' => 'Purple',
+                        'yellow' => 'Yellow',
+                        'grey' => 'Grey',
+                        'cyan' => 'Cyan',
+                        'orange' => 'Orange',
+                        'brown' => 'Brown',
+                    ])
+                    ->label('Pill Color'),
+                \Filament\Forms\Components\FileUpload::make('certificates')
+                    ->multiple()
+                    ->acceptedFileTypes(['image/*', 'application/pdf'])
+                    ->disk('public')
+                    ->directory('skill-certificates')
+                    ->label('Certificates')
+                    ->columnSpanFull(),
                 Textarea::make('description')
                     ->columnSpanFull(),
                 Toggle::make('is_active')
-                    ->required(),
-                TextInput::make('display_order')
                     ->required()
-                    ->numeric()
-                    ->default(0),
+                    ->default(true),
             ]);
     }
 }

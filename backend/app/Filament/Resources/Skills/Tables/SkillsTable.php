@@ -19,18 +19,10 @@ class SkillsTable
                     ->searchable(),
                 TextColumn::make('category')
                     ->searchable(),
-                TextColumn::make('percentage')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('icon')
-                    ->searchable(),
                 TextColumn::make('color')
                     ->searchable(),
                 IconColumn::make('is_active')
                     ->boolean(),
-                TextColumn::make('display_order')
-                    ->numeric()
-                    ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
