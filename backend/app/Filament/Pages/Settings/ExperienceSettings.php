@@ -13,6 +13,8 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\FileUpload;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Schemas\Schema;
@@ -85,9 +87,25 @@ class ExperienceSettings extends Page implements HasForms
                                 Toggle::make('is_current')
                                     ->label('Present / Currently Working Here'),
                                 Textarea::make('description')
-                                    ->label('Description')
+                                    ->label('Short Description')
                                     ->rows(4)
                                     ->required(),
+                                Toggle::make('enable_modal')
+                                    ->label('Enable Modal for this Item')
+                                    ->default(false),
+                                Toggle::make('show_media')
+                                    ->label('Show Media in Modal')
+                                    ->default(false),
+                                RichEditor::make('details')
+                                    ->label('Detailed Description')
+                                    ->columnSpanFull(),
+                                FileUpload::make('media')
+                                    ->label('Media (Images/PDFs)')
+                                    ->disk('public')
+                                    ->directory('experience-media')
+                                    ->multiple()
+                                    ->acceptedFileTypes(['image/*', 'application/pdf'])
+                                    ->columnSpanFull(),
                             ])
                             ->columns(2)
                             ->defaultItems(0)

@@ -1,8 +1,10 @@
 "use client";
 
-import { useRef, useMemo } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { Briefcase, GraduationCap, Calendar } from "lucide-react";
+import { useRef, useMemo, useState } from "react";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { Briefcase, GraduationCap, Calendar, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { useScrollLock } from "@/hooks/useScrollLock";
+import { getImageUrl } from "@/lib/api";
 
 const experienceData = [
   {
@@ -44,6 +46,18 @@ const experienceData = [
 
 export function ExperienceSection({ data }: { data?: any }) {
   const containerRef = useRef<HTMLElement>(null);
+  const [selectedItem, setSelectedItem] = useState<any>(null);
+  const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
+
+  useScrollLock(!!selectedItem);
+
+  const openModal = (item: any) => {
+    if (item.enable_modal) {
+      setSelectedItem(item);
+      setCurrentMediaIndex(0);
+    }
+  };
+  
   
   // Combine and sort
   const combinedData = useMemo(() => {
@@ -138,7 +152,10 @@ export function ExperienceSection({ data }: { data?: any }) {
 
                   {/* Content Card */}
                   <div className={`w-full pl-14 md:pl-0 md:w-1/2 relative z-10 ${isEven ? "md:pr-16 md:text-right" : "md:pl-16 text-left"}`}>
-                    <div className="glass-panel p-6 md:p-8 rounded-3xl hover:-translate-y-2 transition-transform duration-300 relative group overflow-hidden">
+                    <div 
+                      onClick={() => openModal(item)}
+                      className={`glass-panel p-6 md:p-8 rounded-3xl transition-transform duration-300 relative group overflow-hidden ${item.enable_modal ? "cursor-pointer hover:-translate-y-2" : ""}`}
+                    >
                       <div className="absolute inset-0 bg-gradient-to-br from-primary-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                       
                       <div className={`flex items-center gap-2 mb-3 text-primary-accent font-medium text-sm ${isEven ? "md:justify-end" : ""}`}>
@@ -162,6 +179,126 @@ export function ExperienceSection({ data }: { data?: any }) {
           </motion.div>
         </div>
       </div>
+      
+      {/* Detail Modal */}
+      <AnimatePresence>
+        {selectedItem && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 md:p-12 bg-background/80 backdrop-blur-md"
+            onClick={() => setSelectedItem(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              transition={{ type: "spring", duration: 0.5 }}
+              className="bg-black/40 border border-primary-accent/20 p-6 md:p-10 rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-y-auto relative glass-panel shadow-[0_0_40px_rgba(0,245,255,0.15)]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setSelectedItem(null)}
+                className="absolute top-4 right-4 md:top-6 md:right-6 p-2 rounded-full bg-white/5 hover:bg-white/10 text-white transition-colors z-10"
+              >
+                <X size={20} />
+              </button>
+
+              <div className="flex flex-col gap-6 md:gap-8">
+                {/* Header */}
+                <div className="border-b border-white/10 pb-6 pr-8">
+                  <div className="flex items-center gap-2 mb-3 text-primary-accent font-medium text-sm">
+                    <Calendar size={16} />
+                    <span>{selectedItem.period}</span>
+                  </div>
+                  <h2 className="text-2xl md:text-4xl font-heading font-bold text-foreground mb-2">
+                    {selectedItem.role || selectedItem.job_title}
+                  </h2>
+                  <h3 className="text-xl text-muted-foreground font-medium flex items-center gap-2">
+                    {selectedItem.type === "work" ? <Briefcase size={20} /> : <GraduationCap size={20} />}
+                    {selectedItem.company || selectedItem.company_name}
+                  </h3>
+                </div>
+
+                {/* Details */}
+                {selectedItem.details && (
+                  <div 
+                    className="prose prose-invert prose-cyan max-w-none prose-p:text-foreground/80 prose-headings:text-foreground prose-a:text-primary-accent hover:prose-a:text-primary-accent/80"
+                    dangerouslySetInnerHTML={{ __html: selectedItem.details }}
+                  />
+                )}
+                {!selectedItem.details && selectedItem.description && (
+                  <p className="text-foreground/80 leading-relaxed text-lg">
+                    {selectedItem.description}
+                  </p>
+                )}
+
+                {/* Media Viewer */}
+                {selectedItem.show_media && selectedItem.media && selectedItem.media.length > 0 && (
+                  <div className="mt-4 border-t border-white/10 pt-8">
+                    <h4 className="text-lg font-heading font-semibold text-foreground mb-4">Related Media</h4>
+                    <div className="relative w-full rounded-xl overflow-hidden border border-foreground/10 bg-black/20 flex items-center justify-center min-h-[200px]">
+                      {(() => {
+                        const url = getImageUrl(selectedItem.media[currentMediaIndex]);
+                        if (!url) return null;
+                        
+                        const isPdf = url.toLowerCase().endsWith('.pdf');
+                        
+                        return isPdf ? (
+                          <iframe src={`${url}#toolbar=0&navpanes=0&scrollbar=0`} className="w-full h-[50vh] border-0" />
+                        ) : (
+                          <img src={url} alt={`${selectedItem.role} Media`} className="w-full h-auto max-h-[50vh] object-contain pointer-events-none" />
+                        );
+                      })()}
+                      
+                      {/* Navigation Arrows */}
+                      {selectedItem.media.length > 1 && (
+                        <>
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setCurrentMediaIndex((prev) => (prev === 0 ? selectedItem.media.length - 1 : prev - 1));
+                            }}
+                            className="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 hover:bg-black/80 text-white backdrop-blur-sm transition-all"
+                          >
+                            <ChevronLeft size={24} />
+                          </button>
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setCurrentMediaIndex((prev) => (prev === selectedItem.media.length - 1 ? 0 : prev + 1));
+                            }}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 hover:bg-black/80 text-white backdrop-blur-sm transition-all"
+                          >
+                            <ChevronRight size={24} />
+                          </button>
+                          
+                          {/* Dots */}
+                          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
+                            {selectedItem.media.map((_: any, idx: number) => (
+                              <button
+                                key={idx}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setCurrentMediaIndex(idx);
+                                }}
+                                className={`w-2 h-2 rounded-full transition-all ${
+                                  idx === currentMediaIndex ? 'bg-primary-accent w-4' : 'bg-white/30 hover:bg-white/50'
+                                }`}
+                              />
+                            ))}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
