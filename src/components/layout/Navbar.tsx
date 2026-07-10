@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Moon, Sun } from "lucide-react";
 import { getImageUrl, getResumeDownloadUrl } from "@/lib/api";
+import { useScrollLock } from "@/hooks/useScrollLock";
 
 const NAV_LINKS = [
   { name: "About", href: "#about" },
@@ -18,6 +19,8 @@ export function Navbar({ settings, socialMedia, home }: { settings?: any, social
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isDark, setIsDark] = useState(true);
+
+  useScrollLock(isMobileMenuOpen);
 
   useEffect(() => {
     const handleScroll = () => {

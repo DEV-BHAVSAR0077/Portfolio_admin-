@@ -21,10 +21,10 @@ export function HeroSection({ data }: { data?: any }) {
   const resumeUrl = data?.resume ? getResumeDownloadUrl() : "/resume.pdf";
   
   const socialLinks = data?.social_links || [
-    { icon: 'Terminal', href: "https://github.com/devbhavsar0077" },
-    { icon: 'Briefcase', href: "https://linkedin.com/in/devbhavsar" },
-    { icon: 'Hash', href: "https://twitter.com/devbhavsar" },
-    { icon: 'Mail', href: "https://mail.google.com/mail/?view=cm&fs=1&to=contact@devbhavsar.com" },
+    { name: 'GitHub', icon: 'Terminal', href: "https://github.com/devbhavsar0077" },
+    { name: 'LinkedIn', icon: 'Briefcase', href: "https://linkedin.com/in/devbhavsar" },
+    { name: 'X / Twitter', icon: 'Hash', href: "https://twitter.com/devbhavsar" },
+    { name: 'Email Me', icon: 'Mail', href: "https://mail.google.com/mail/?view=cm&fs=1&to=contact@devbhavsar.com" },
   ];
 
   const statistics = data?.statistics || [
@@ -79,7 +79,7 @@ export function HeroSection({ data }: { data?: any }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-foreground/5 border border-foreground/10 mb-6 backdrop-blur-md"
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-foreground/5 border border-foreground/10 mb-6 backdrop-blur-md mt-16 md:mt-12"
           >
             {data?.available_for_hire !== false ? (
               <>
@@ -151,9 +151,11 @@ export function HeroSection({ data }: { data?: any }) {
                   href={(social.href?.includes('@') && !social.href?.startsWith('http')) ? `https://mail.google.com/mail/?view=cm&fs=1&to=${social.href.replace('mailto:', '')}` : social.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="p-3 rounded-full bg-foreground/5 border border-foreground/10 text-muted-foreground hover:text-primary-accent hover:border-primary-accent/50 hover:bg-primary-accent/10 transition-all duration-300"
+                  title={social.name || ""}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-foreground/5 border border-foreground/10 text-muted-foreground hover:text-primary-accent hover:border-primary-accent/50 hover:bg-primary-accent/10 transition-all duration-300"
                 >
-                  <IconComponent size={22} />
+                  <IconComponent size={20} />
+                  {social.name && <span className="text-sm font-medium">{social.name}</span>}
                 </a>
               );
             })}
@@ -166,6 +168,7 @@ export function HeroSection({ data }: { data?: any }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.2 }}
           className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-4 p-6 md:p-8 rounded-3xl glass-panel relative overflow-hidden"
+          style={{ opacity: 1, transform: 'none', marginTop: '50px' }}
         >
           <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
           

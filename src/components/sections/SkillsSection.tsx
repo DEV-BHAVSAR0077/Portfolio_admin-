@@ -3,6 +3,7 @@
 import { useRef, useMemo, useState } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { getImageUrl } from "@/lib/api";
+import { useScrollLock } from "@/hooks/useScrollLock";
 
 const skillCategories = [
   {
@@ -43,6 +44,8 @@ export function SkillsSection({ data, sectionData }: { data?: any, sectionData?:
   const containerRef = useRef<HTMLElement>(null);
   const [selectedSkill, setSelectedSkill] = useState<any>(null);
   const [currentCertIndex, setCurrentCertIndex] = useState(0);
+  
+  useScrollLock(!!selectedSkill);
 
   const openSkillModal = (skillObj: any) => {
     setSelectedSkill(skillObj);
@@ -164,7 +167,7 @@ export function SkillsSection({ data, sectionData }: { data?: any, sectionData?:
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto glass-panel p-6 md:p-8 rounded-3xl z-10"
+              className="relative w-full max-w-2xl max-h-[85vh] overflow-y-auto overscroll-contain glass-panel p-6 md:p-8 rounded-3xl z-10"
             >
               <button
                 onClick={() => setSelectedSkill(null)}
@@ -194,7 +197,7 @@ export function SkillsSection({ data, sectionData }: { data?: any, sectionData?:
                     )}
                   </h4>
                   
-                  <div className="relative w-full rounded-xl overflow-hidden border border-foreground/10 bg-black/20 flex items-center justify-center min-h-[300px]">
+                  <div className="relative w-full rounded-xl overflow-hidden border border-foreground/10 bg-black/20 flex items-center justify-center">
                     {(() => {
                       const url = getImageUrl(selectedSkill.certificates[currentCertIndex]);
                       if (!url) return null;
@@ -202,9 +205,9 @@ export function SkillsSection({ data, sectionData }: { data?: any, sectionData?:
                       const isPdf = url.toLowerCase().endsWith('.pdf');
                       
                       return isPdf ? (
-                        <iframe src={`${url}#toolbar=0&navpanes=0&scrollbar=0`} className="w-full h-[60vh] md:h-[70vh] border-0" />
+                        <iframe src={`${url}#toolbar=0&navpanes=0&scrollbar=0`} className="w-full aspect-[1.414/1] max-h-[70vh] border-0" />
                       ) : (
-                        <img src={url} alt={`${selectedSkill.name} Certificate`} className="w-full h-auto max-h-[60vh] md:max-h-[70vh] object-contain pointer-events-none" />
+                        <img src={url} alt={`${selectedSkill.name} Certificate`} className="max-w-full w-auto h-auto max-h-[60vh] md:max-h-[70vh] object-contain pointer-events-none" />
                       );
                     })()}
                     

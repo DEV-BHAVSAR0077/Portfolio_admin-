@@ -83,6 +83,10 @@ class HomePageSettings extends Page implements HasForms
                         Repeater::make('social_links')
                             ->label('Social Media Buttons')
                             ->schema([
+                                TextInput::make('name')
+                                    ->label('Name')
+                                    ->placeholder('e.g. GitHub')
+                                    ->required(),
                                 Select::make('icon')
                                     ->label('Icon')
                                     ->options([
@@ -96,7 +100,7 @@ class HomePageSettings extends Page implements HasForms
                                     ->label('URL')
                                     ->required(),
                             ])
-                            ->columns(2)
+                            ->columns(3)
                             ->defaultItems(0)
                             ->reorderableWithButtons()
                             ->collapsible(),
