@@ -42,32 +42,47 @@ const experienceData = [
   }
 ];
 
-export function ExperienceSection({ data, education }: { data?: any, education?: any }) {
+export function ExperienceSection({ data }: { data?: any }) {
   const containerRef = useRef<HTMLElement>(null);
   
   // Combine and sort
   const combinedData = useMemo(() => {
     let combined: any[] = [];
-    if (data && Array.isArray(data) && data.length > 0) {
-      combined = [...combined, ...data.map((item: any) => ({ ...item, type: 'work' }))];
-    }
-    if (education && Array.isArray(education) && education.length > 0) {
-      combined = [...combined, ...education.map((item: any) => ({ 
-        ...item, 
-        role: item.degree, 
-        company: item.institution,
-        period: `${item.start_date ? item.start_date.substring(0,4) : ''} - ${item.end_date ? item.end_date.substring(0,4) : 'Present'}`,
-        type: 'education' 
-      }))];
+    if (data?.timeline_items && Array.isArray(data.timeline_items) && data.timeline_items.length > 0) {
+      combined = data.timeline_items.map((item: any) => {
+        
+        // Format dates
+        const formatDate = (dateString: string) => {
+          if (!dateString) return '';
+          const date = new Date(dateString);
+          return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+        };
+        
+        const start = formatDate(item.start_date);
+        const end = item.is_current ? 'Present' : formatDate(item.end_date);
+        
+        return {
+          ...item,
+          role: item.title,
+          company: item.organization,
+          period: `${start} - ${end}`,
+        };
+      });
+      
+      // Sort ascending (past to latest)
+      combined.sort((a, b) => {
+        const dateA = new Date(a.start_date || 0).getTime();
+        const dateB = new Date(b.start_date || 0).getTime();
+        return dateA - dateB;
+      });
     }
     
     if (combined.length === 0) {
       combined = experienceData; // Fallback
     }
     
-    // Simplistic sort by display order if available, otherwise just use as is
-    return combined.sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
-  }, [data, education]);
+    return combined;
+  }, [data]);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -90,13 +105,13 @@ export function ExperienceSection({ data, education }: { data?: any, education?:
             Experience & <span className="text-gradient">Education</span>
           </h2>
           <p className="text-muted-foreground text-lg">
-            My professional journey and academic background.
+            {data?.subtitle || "My professional journey and academic background."}
           </p>
         </motion.div>
 
         <div className="max-w-4xl mx-auto relative">
           {/* Timeline Line */}
-          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-white/20 to-transparent -translate-x-1/2" />
+          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-transparent via-primary-accent/70 to-transparent -translate-x-1/2 shadow-[0_0_15px_rgba(0,245,255,0.5)] z-0" />
 
           <motion.div style={{ y }} className="space-y-12 relative">
             {combinedData.map((item: any, index: number) => {
@@ -108,8 +123,8 @@ export function ExperienceSection({ data, education }: { data?: any, education?:
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-100px" }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className={`flex flex-col md:flex-row items-start gap-8 md:gap-0 ${
-                    isEven ? "md:flex-row-reverse" : ""
+                  className={`flex flex-col md:flex-row items-center w-full relative ${
+                    isEven ? "md:justify-start" : "md:justify-end"
                   }`}
                 >
                   {/* Timeline Node */}
@@ -122,7 +137,7 @@ export function ExperienceSection({ data, education }: { data?: any, education?:
                   </div>
 
                   {/* Content Card */}
-                  <div className={`w-full pl-12 md:pl-0 md:w-1/2 ${isEven ? "md:pr-16 md:text-right" : "md:pl-16"}`}>
+                  <div className={`w-full pl-14 md:pl-0 md:w-1/2 relative z-10 ${isEven ? "md:pr-16 md:text-right" : "md:pl-16 text-left"}`}>
                     <div className="glass-panel p-6 md:p-8 rounded-3xl hover:-translate-y-2 transition-transform duration-300 relative group overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-br from-primary-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                       

@@ -19,6 +19,8 @@ class ExperienceResource extends Resource
     protected static \UnitEnum|string|null $navigationGroup = 'Experience';
     protected static ?string $model = Experience::class;
 
+    protected static bool $shouldRegisterNavigation = false;
+
     protected static \BackedEnum|string|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'company';

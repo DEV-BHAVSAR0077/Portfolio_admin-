@@ -22,7 +22,7 @@ export default async function Home() {
       <HeroSection data={data.home} />
       <AboutSection data={data.about} />
       <SkillsSection data={data.skills} sectionData={data.skill_section} />
-      <ExperienceSection data={data.experiences} education={data.education} />
+      <ExperienceSection data={data.experience_section} />
       <ProjectsSection data={data.projects} />
       <ServicesSection data={data.services} />
       <AchievementsSection data={data.achievements} />

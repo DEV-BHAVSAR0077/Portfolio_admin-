@@ -16,6 +16,8 @@ use App\Models\Testimonial;
 use App\Models\SocialMedia;
 use App\Models\GlobalSetting;
 
+use App\Models\ExperienceSection;
+
 class PortfolioController extends BaseController
 {
     public function index()
@@ -24,8 +26,9 @@ class PortfolioController extends BaseController
             'home' => HomePage::first(),
             'about' => AboutSection::first(),
             'skills' => Skill::where('is_active', true)->orderBy('display_order')->get(),
-            'experiences' => Experience::orderBy('display_order')->get(),
-            'education' => Education::orderBy('display_order')->get(),
+            'experiences' => Experience::orderBy('display_order')->get(), // Keep for backwards compatibility if needed
+            'education' => Education::orderBy('display_order')->get(), // Keep for backwards compatibility if needed
+            'experience_section' => ExperienceSection::first(),
             'projects' => Project::orderBy('display_order')->get(),
             'services' => Service::where('is_active', true)->orderBy('display_order')->get(),
             'achievements' => Achievement::orderBy('display_order')->get(),

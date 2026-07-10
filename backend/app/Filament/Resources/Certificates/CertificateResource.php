@@ -17,6 +17,7 @@ use Filament\Tables\Table;
 class CertificateResource extends Resource
 {
     protected static \UnitEnum|string|null $navigationGroup = 'About';
+    protected static bool $shouldRegisterNavigation = false;
     protected static ?string $model = Certificate::class;
 
     protected static \BackedEnum|string|null $navigationIcon = Heroicon::OutlinedRectangleStack;
