@@ -238,60 +238,69 @@ export function ExperienceSection({ data }: { data?: any }) {
                 {selectedItem.show_media && selectedItem.media && selectedItem.media.length > 0 && (
                   <div className="mt-4 border-t border-white/10 pt-8">
                     <h4 className="text-lg font-heading font-semibold text-foreground mb-4">Related Media</h4>
-                    <div className="relative w-full rounded-xl overflow-hidden border border-foreground/10 bg-black/20 flex items-center justify-center min-h-[200px]">
-                      {(() => {
-                        const url = getImageUrl(selectedItem.media[currentMediaIndex]);
-                        if (!url) return null;
-                        
-                        const isPdf = url.toLowerCase().endsWith('.pdf');
-                        
-                        return isPdf ? (
-                          <iframe src={`${url}#toolbar=0&navpanes=0&scrollbar=0`} className="w-full h-[50vh] border-0" />
-                        ) : (
-                          <img src={url} alt={`${selectedItem.role} Media`} className="w-full h-auto max-h-[50vh] object-contain pointer-events-none" />
-                        );
-                      })()}
+                    {(() => {
+                      const url = getImageUrl(selectedItem.media[currentMediaIndex]);
+                      if (!url) return null;
                       
-                      {/* Navigation Arrows */}
-                      {selectedItem.media.length > 1 && (
-                        <>
-                          <button 
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setCurrentMediaIndex((prev) => (prev === 0 ? selectedItem.media.length - 1 : prev - 1));
-                            }}
-                            className="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 hover:bg-black/80 text-white backdrop-blur-sm transition-all"
-                          >
-                            <ChevronLeft size={24} />
-                          </button>
-                          <button 
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setCurrentMediaIndex((prev) => (prev === selectedItem.media.length - 1 ? 0 : prev + 1));
-                            }}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 hover:bg-black/80 text-white backdrop-blur-sm transition-all"
-                          >
-                            <ChevronRight size={24} />
-                          </button>
+                      const isPdf = url.toLowerCase().endsWith('.pdf');
+                      
+                      return (
+                        <div className={`relative mx-auto rounded-xl overflow-hidden border border-foreground/10 bg-black/20 flex items-center justify-center ${isPdf ? 'w-full' : 'w-fit'}`}>
+                          {isPdf ? (
+                            <iframe 
+                              src={`${url}#toolbar=0&navpanes=0&view=Fit`} 
+                              className="w-full aspect-[1.2941] border-0 bg-white" 
+                            />
+                          ) : (
+                            <img 
+                              src={url} 
+                              alt={`${selectedItem.role} Media`} 
+                              className="w-auto h-auto max-h-[50vh] max-w-full object-contain pointer-events-none" 
+                            />
+                          )}
                           
-                          {/* Dots */}
-                          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
-                            {selectedItem.media.map((_: any, idx: number) => (
-                              <button
-                                key={idx}
+                          {/* Navigation Arrows */}
+                          {selectedItem.media.length > 1 && (
+                            <>
+                              <button 
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  setCurrentMediaIndex(idx);
+                                  setCurrentMediaIndex((prev) => (prev === 0 ? selectedItem.media.length - 1 : prev - 1));
                                 }}
-                                className={`w-2 h-2 rounded-full transition-all ${
-                                  idx === currentMediaIndex ? 'bg-primary-accent w-4' : 'bg-white/30 hover:bg-white/50'
-                                }`}
-                              />
-                            ))}
-                          </div>
-                        </>
-                      )}
-                    </div>
+                                className="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 hover:bg-black/80 text-white backdrop-blur-sm transition-all"
+                              >
+                                <ChevronLeft size={24} />
+                              </button>
+                              <button 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setCurrentMediaIndex((prev) => (prev === selectedItem.media.length - 1 ? 0 : prev + 1));
+                                }}
+                                className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 hover:bg-black/80 text-white backdrop-blur-sm transition-all"
+                              >
+                                <ChevronRight size={24} />
+                              </button>
+                              
+                              {/* Dots */}
+                              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
+                                {selectedItem.media.map((_: any, idx: number) => (
+                                  <button
+                                    key={idx}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setCurrentMediaIndex(idx);
+                                    }}
+                                    className={`w-2 h-2 rounded-full transition-all ${
+                                      idx === currentMediaIndex ? 'bg-primary-accent w-4' : 'bg-white/30 hover:bg-white/50'
+                                    }`}
+                                  />
+                                ))}
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      );
+                    })()}
                   </div>
                 )}
               </div>

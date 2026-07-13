@@ -17,6 +17,7 @@ use App\Models\SocialMedia;
 use App\Models\GlobalSetting;
 
 use App\Models\ExperienceSection;
+use App\Models\ProjectSection;
 
 class PortfolioController extends BaseController
 {
@@ -29,6 +30,7 @@ class PortfolioController extends BaseController
             'experiences' => Experience::orderBy('display_order')->get(), // Keep for backwards compatibility if needed
             'education' => Education::orderBy('display_order')->get(), // Keep for backwards compatibility if needed
             'experience_section' => ExperienceSection::first(),
+            'project_section' => ProjectSection::first(),
             'projects' => Project::orderBy('display_order')->get(),
             'services' => Service::where('is_active', true)->orderBy('display_order')->get(),
             'achievements' => Achievement::orderBy('display_order')->get(),

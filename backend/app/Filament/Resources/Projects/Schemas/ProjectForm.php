@@ -18,22 +18,24 @@ class ProjectForm
                     ->required(),
                 TextInput::make('slug')
                     ->required(),
-                TextInput::make('thumbnail'),
-                TextInput::make('gallery'),
                 FileUpload::make('banner_image')
-                    ->image(),
+                    ->image()
+                    ->disk('public')
+                    ->directory('projects'),
                 Textarea::make('description')
                     ->columnSpanFull(),
                 Textarea::make('problem_statement')
                     ->columnSpanFull(),
                 Textarea::make('solution')
                     ->columnSpanFull(),
-                TextInput::make('features'),
                 TextInput::make('tech_stack'),
                 TextInput::make('project_type'),
-                TextInput::make('status'),
                 TextInput::make('github_link'),
                 TextInput::make('live_demo'),
+                TextInput::make('case_study_link'),
+                Toggle::make('show_live_demo')->default(true),
+                Toggle::make('show_github_link')->default(true),
+                Toggle::make('show_case_study')->default(true),
                 Toggle::make('is_featured')
                     ->required(),
                 TextInput::make('seo_title'),

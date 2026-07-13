@@ -1,8 +1,9 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { Terminal, ExternalLink, ArrowRight, Layers } from "lucide-react";
+import { useRef, useState, useEffect } from "react";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { Terminal, ExternalLink, ArrowRight, Layers, ChevronLeft, ChevronRight } from "lucide-react";
+import { getImageUrl } from "@/lib/api";
 
 const flagshipProject = {
   title: "Dinely - Restaurant SaaS Platform",
@@ -45,22 +46,33 @@ const otherProjects = [
   }
 ];
 
-export function ProjectsSection({ data }: { data?: any }) {
+export function ProjectsSection({ data, sectionData }: { data?: any, sectionData?: any }) {
   const containerRef = useRef<HTMLElement>(null);
   
   // Use CMS data or fallback
   const allProjects = data && Array.isArray(data) && data.length > 0 ? data : [flagshipProject, ...otherProjects];
   
-  // First project is flagship if is_featured is true, otherwise just the first one
-  let flagship = allProjects.find((p: any) => p.is_featured);
-  if (!flagship && allProjects.length > 0) flagship = allProjects[0];
-  if (!flagship) flagship = flagshipProject;
-  
-  // The rest are other projects
-  const others = allProjects.filter((p: any) => p.id !== flagship.id).slice(0, 6); // Max 6 others
-  if (others.length === 0 && data?.length === 0) {
-      others.push(...otherProjects);
-  }
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    if (allProjects.length <= 1) return;
+    
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % allProjects.length);
+    }, 6000);
+    
+    return () => clearInterval(timer);
+  }, [allProjects.length]);
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % allProjects.length);
+  };
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev - 1 + allProjects.length) % allProjects.length);
+  };
+
+  const flagship = allProjects[currentIndex] || flagshipProject;
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -80,37 +92,80 @@ export function ProjectsSection({ data }: { data?: any }) {
           className="mb-16 md:mb-24 text-center max-w-3xl mx-auto"
         >
           <h2 className="text-3xl md:text-5xl font-heading font-bold text-foreground mb-4">
-            Featured <span className="text-gradient">Work</span>
+            {sectionData?.title ? (
+              <span dangerouslySetInnerHTML={{ __html: sectionData.title.replace('Work', '<span class="text-gradient">Work</span>').replace('Projects', '<span class="text-gradient">Projects</span>') }} />
+            ) : (
+              <>Featured <span className="text-gradient">Work</span></>
+            )}
           </h2>
           <p className="text-muted-foreground text-lg">
-            A selection of my best projects spanning AI, full-stack web, and mobile development.
+            {sectionData?.subtitle || "A selection of my best projects spanning AI, full-stack web, and mobile development."}
           </p>
         </motion.div>
 
-        {/* Flagship Project */}
-        <motion.div
-          style={{ y }}
-          className="mb-20 glass-panel rounded-[2rem] overflow-hidden border border-primary-accent/20 relative group"
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-primary-accent/5 via-transparent to-secondary-accent/5 pointer-events-none" />
+        {/* Carousel Project */}
+        <div className="relative mb-20 group">
+          {/* Navigation Arrows */}
+          <button 
+            onClick={handlePrev}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 md:-translate-x-6 z-20 p-3 rounded-full bg-background border border-foreground/10 text-foreground shadow-xl hover:text-primary-accent hover:border-primary-accent transition-all hidden md:flex"
+            aria-label="Previous project"
+          >
+            <ChevronLeft size={24} />
+          </button>
+          
+          <button 
+            onClick={handleNext}
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 md:translate-x-6 z-20 p-3 rounded-full bg-background border border-foreground/10 text-foreground shadow-xl hover:text-primary-accent hover:border-primary-accent transition-all hidden md:flex"
+            aria-label="Next project"
+          >
+            <ChevronRight size={24} />
+          </button>
+
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentIndex}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.4 }}
+              className="glass-panel rounded-[2rem] overflow-hidden border border-primary-accent/20 relative"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-primary-accent/5 via-transparent to-secondary-accent/5 pointer-events-none" />
           
           <div className="grid grid-cols-1 lg:grid-cols-2">
             {/* Image Placeholder */}
-            <div 
-              className="h-64 lg:h-auto min-h-[400px] relative overflow-hidden flex items-center justify-center p-12"
-              style={{ background: flagship.banner_image || flagship.image || "linear-gradient(to right bottom, #0F172A, #00F5FF20)" }}
-            >
-              <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
-              <div className="relative z-10 text-center">
-                <Layers className="w-20 h-20 text-foreground/50 mx-auto mb-6" />
-                <h3 className="text-4xl font-heading font-bold text-foreground/80 uppercase tracking-widest border-4 border-foreground/20 inline-block p-4">{flagship.name || flagship.title || 'PROJECT'}</h3>
-              </div>
-            </div>
+            {(() => {
+              const hasActualImage = (flagship.banner_image || flagship.image) && 
+                                     !String(flagship.banner_image).includes("linear-gradient") && 
+                                     !String(flagship.image).includes("linear-gradient");
+                                     
+              return (
+                <div 
+                  className="h-64 lg:h-auto min-h-[400px] relative overflow-hidden flex items-center justify-center p-12"
+                  style={
+                    hasActualImage
+                      ? { backgroundImage: `url(${getImageUrl(flagship.banner_image || flagship.image)})`, backgroundSize: 'cover', backgroundPosition: 'center' }
+                      : { background: flagship.banner_image || flagship.image || "linear-gradient(to right bottom, #0F172A, #00F5FF20)" }
+                  }
+                >
+                  {!hasActualImage && (
+                    <>
+                      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+                      <div className="relative z-10 text-center">
+                        <Layers className="w-20 h-20 text-foreground/50 mx-auto mb-6" />
+                        <h3 className="text-4xl font-heading font-bold text-foreground/80 uppercase tracking-widest border-4 border-foreground/20 inline-block p-4">{flagship.name || flagship.title || 'PROJECT'}</h3>
+                      </div>
+                    </>
+                  )}
+                </div>
+              );
+            })()}
             
             {/* Content */}
             <div className="p-8 md:p-12 lg:p-16 flex flex-col justify-center">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-accent/10 border border-primary-accent/20 text-primary-accent text-sm font-medium mb-6 w-fit">
-                Flagship Project
+                {flagship.project_type || "Flagship Project"}
               </div>
               <h3 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
                 {flagship.name || flagship.title}
@@ -139,68 +194,30 @@ export function ProjectsSection({ data }: { data?: any }) {
               </div>
               
               <div className="flex flex-wrap items-center gap-4 mt-auto">
-                <a href={flagship.live_demo || flagship.demoLink || "#"} className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-foreground text-background font-semibold hover:bg-primary-accent transition-colors">
-                  Live Demo <ExternalLink size={16} />
-                </a>
-                <a href={flagship.github_link || flagship.githubLink || "#"} className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-foreground/10 text-foreground font-semibold hover:bg-foreground/20 transition-colors border border-foreground/10">
-                  <Terminal size={16} /> GitHub
-                </a>
-                <a href={flagship.caseStudyLink || "#"} className="inline-flex items-center gap-2 text-primary-accent hover:text-foreground font-semibold transition-colors ml-auto">
-                  Case Study <ArrowRight size={16} />
-                </a>
+                {flagship.show_live_demo !== false && flagship.show_live_demo !== 0 && (
+                  <a href={flagship.live_demo || flagship.demoLink || "#"} className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-foreground text-background font-semibold hover:bg-primary-accent transition-colors">
+                    Live Demo <ExternalLink size={16} />
+                  </a>
+                )}
+                {flagship.show_github_link !== false && flagship.show_github_link !== 0 && (
+                  <a href={flagship.github_link || flagship.githubLink || "#"} className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-foreground/10 text-foreground font-semibold hover:bg-foreground/20 transition-colors border border-foreground/10">
+                    <Terminal size={16} /> GitHub
+                  </a>
+                )}
+                {flagship.show_case_study !== false && flagship.show_case_study !== 0 && (
+                  <a href={flagship.case_study_link || flagship.caseStudyLink || "#"} className="inline-flex items-center gap-2 text-primary-accent hover:text-foreground font-semibold transition-colors ml-auto">
+                    Case Study <ArrowRight size={16} />
+                  </a>
+                )}
               </div>
             </div>
           </div>
-        </motion.div>
-
-        {/* Other Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {others.map((project: any, index: number) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="glass-panel p-8 rounded-3xl group hover:-translate-y-2 transition-all duration-300 relative overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-              
-              <div className="flex justify-between items-start mb-6">
-                <div className="px-3 py-1 rounded-full bg-foreground/5 border border-foreground/10 text-xs font-medium text-foreground/70">
-                  {project.project_type || project.category}
-                </div>
-                <div className="flex gap-2">
-                  <a href={project.github_link || project.githubLink || "#"} className="text-muted-foreground hover:text-foreground transition-colors">
-                    <Terminal size={20} />
-                  </a>
-                  <a href={project.live_demo || project.demoLink || "#"} className="text-muted-foreground hover:text-foreground transition-colors">
-                    <ExternalLink size={20} />
-                  </a>
-                </div>
-              </div>
-              
-              <h3 className="text-2xl font-heading font-bold text-foreground mb-4 group-hover:text-primary-accent transition-colors">
-                {project.name || project.title}
-              </h3>
-              
-              <p className="text-muted-foreground mb-8 line-clamp-3">
-                {project.description}
-              </p>
-              
-              <div className="flex flex-wrap gap-2 mt-auto">
-                {(project.tech_stack || project.technologies || []).map((tech: string) => (
-                  <span key={tech} className="text-xs font-medium text-foreground/50">
-                    {tech}
-                  </span>
-                ))}
-              </div>
             </motion.div>
-          ))}
+          </AnimatePresence>
         </div>
         
         <div className="mt-16 text-center">
-          <a href="https://github.com/devbhavsar0077" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-foreground hover:text-primary-accent transition-colors font-medium">
+          <a href="https://github.com/DEV-BHAVSAR0077" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-foreground hover:text-primary-accent transition-colors font-medium">
             View all projects on GitHub <ArrowRight size={16} />
           </a>
         </div>

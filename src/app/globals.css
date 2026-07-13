@@ -200,10 +200,13 @@
   }
   
   .glass {
-    @apply bg-card backdrop-blur-md border border-border;
+    @apply bg-card backdrop-blur-sm border border-border;
+    transform: translateZ(0);
   }
   
   .glass-panel {
-    @apply bg-white/5 backdrop-blur-lg border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.1)];
+    @apply bg-black/20 backdrop-blur-md border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.1)];
+    transform: translateZ(0);
+    will-change: transform;
   }
 }
