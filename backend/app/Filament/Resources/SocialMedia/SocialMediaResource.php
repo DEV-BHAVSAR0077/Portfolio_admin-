@@ -17,6 +17,7 @@ use Filament\Tables\Table;
 class SocialMediaResource extends Resource
 {
     protected static \UnitEnum|string|null $navigationGroup = 'Contact';
+    protected static bool $shouldRegisterNavigation = false;
     protected static ?string $model = SocialMedia::class;
 
     protected static \BackedEnum|string|null $navigationIcon = Heroicon::OutlinedRectangleStack;

@@ -72,7 +72,7 @@ export function ContactSection({ settings, socialMedia }: { settings?: any, soci
             Let's <span className="text-gradient">Connect</span>
           </h2>
           <p className="text-muted-foreground text-lg">
-            Have a project in mind or looking for technical consultation? Let's discuss how we can work together.
+            {settings?.contact_subtitle || "Have a project in mind or looking for technical consultation? Let's discuss how we can work together."}
           </p>
         </motion.div>
 
@@ -86,7 +86,7 @@ export function ContactSection({ settings, socialMedia }: { settings?: any, soci
           >
             <h3 className="text-2xl font-heading font-bold text-foreground mb-6">Contact Information</h3>
             <p className="text-muted-foreground mb-12">
-              I'm currently open for new opportunities, freelance projects, and consultations. Fill out the form or reach out directly.
+              {settings?.contact_info_text || "I'm currently open for new opportunities, freelance projects, and consultations. Fill out the form or reach out directly."}
             </p>
 
             <div className="space-y-8">
@@ -108,8 +108,8 @@ export function ContactSection({ settings, socialMedia }: { settings?: any, soci
                 </div>
                 <div>
                   <h4 className="text-foreground font-medium mb-1">Phone</h4>
-                  <a href={`tel:${settings?.contact_phone?.replace(/[^0-9+]/g, '') || '+910000000000'}`} className="text-muted-foreground hover:text-secondary-accent transition-colors">
-                    {settings?.contact_phone || '+91 (000) 000-0000'}
+                  <a href={`tel:${settings?.phone_number?.replace(/[^0-9+]/g, '') || '+910000000000'}`} className="text-muted-foreground hover:text-secondary-accent transition-colors">
+                    {settings?.phone_number || '+91 (000) 000-0000'}
                   </a>
                 </div>
               </div>
@@ -128,10 +128,22 @@ export function ContactSection({ settings, socialMedia }: { settings?: any, soci
             </div>
 
             {/* Availability Badge */}
-            <div className="mt-12 inline-flex items-center gap-3 px-4 py-2 rounded-full glass-panel border-success/30 bg-success/5">
-              <span className="w-3 h-3 rounded-full bg-success animate-pulse" />
-              <span className="text-success font-medium">Available for hire</span>
-            </div>
+            {(() => {
+              // Handle database 0/1, strings, or booleans, defaulting to true if undefined
+              const isAvailable = settings?.is_available;
+              const isAvailableBool = isAvailable === undefined ? true : (isAvailable === true || isAvailable === 1 || isAvailable === '1');
+              
+              return (
+                <div className={`mt-12 inline-flex items-center gap-3 px-4 py-2 rounded-full glass-panel ${isAvailableBool ? 'border-success/30 bg-success/5' : 'border-yellow-500/30 bg-yellow-500/5'}`}>
+                  <span className={`w-3 h-3 rounded-full animate-pulse ${isAvailableBool ? 'bg-success' : 'bg-yellow-500'}`} />
+                  <span className={`font-medium ${isAvailableBool ? 'text-success' : 'text-yellow-500'}`}>
+                    {isAvailableBool 
+                      ? (settings?.availability_status || "Available for hire") 
+                      : "Booking for the next available slot"}
+                  </span>
+                </div>
+              );
+            })()}
           </motion.div>
 
           {/* Contact Form */}
