@@ -103,6 +103,41 @@ export function ProjectsSection({ data, sectionData }: { data?: any, sectionData
           </p>
         </motion.div>
 
+        {/* Stats Row */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-20 text-center md:text-left"
+        >
+          {(sectionData?.stats && Array.isArray(sectionData.stats) && sectionData.stats.length > 0 
+            ? sectionData.stats 
+            : [
+                { number: "12+", detail: "Awards Won" },
+                { number: "150+", detail: "Open Source PRs" },
+                { number: "500+", detail: "GitHub Stars" },
+                { number: "1000+", detail: "Cups of Coffee" }
+              ]
+          ).map((stat: any, idx: number) => {
+            const match = String(stat.number).match(/^([\d,.]+)(.*)$/);
+            return (
+              <div key={idx} className={`px-4 ${idx === 0 ? 'md:pl-0' : ''}`}>
+                <div className="text-4xl md:text-5xl font-heading font-bold text-foreground mb-2 tracking-tight">
+                  {match ? (
+                    <>
+                      {match[1]}<span className="text-primary-accent">{match[2]}</span>
+                    </>
+                  ) : (
+                    stat.number
+                  )}
+                </div>
+                <div className="text-muted-foreground font-medium">{stat.detail}</div>
+              </div>
+            );
+          })}
+        </motion.div>
+
         {/* Carousel Project */}
         <div className="relative mb-20 group">
           {/* Navigation Arrows */}

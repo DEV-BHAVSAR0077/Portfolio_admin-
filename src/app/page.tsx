@@ -25,7 +25,7 @@ export default async function Home() {
       <ExperienceSection data={data.experience_section} />
       <ProjectsSection data={data.projects} sectionData={data.project_section} />
       <ServicesSection data={data.services} />
-      <AchievementsSection data={data.achievements} />
+      <AchievementsSection data={data.project_section?.stats || data.achievements} />
       <ContactSection settings={data.settings} socialMedia={data.social_media} />
     </div>
   );

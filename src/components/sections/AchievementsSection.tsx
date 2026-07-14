@@ -62,7 +62,36 @@ export function AchievementsSection({ data }: { data?: any }) {
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {allAchievements.map((item: any, index: number) => {
-            const IconComponent = typeof item.icon === 'string' ? getIcon(item.icon) : (item.icon || Trophy);
+            // Determine icon based on index or existing icon property
+            const defaultIcons = [Trophy, Code, Star, Coffee];
+            let IconComponent;
+            if (item.icon) {
+              IconComponent = typeof item.icon === 'string' ? getIcon(item.icon) : item.icon;
+            } else {
+              IconComponent = defaultIcons[index % defaultIcons.length];
+            }
+
+            // Extract numeric value and suffix for the counter animation
+            let value = 0;
+            let suffix = "";
+            let label = "";
+
+            if (item.number !== undefined) {
+              // Parse 'number' string like "150+" into value: 150, suffix: "+"
+              const match = String(item.number).match(/^([\d,.]+)(.*)$/);
+              if (match) {
+                value = parseFloat(match[1].replace(/,/g, ''));
+                suffix = match[2];
+              } else {
+                value = parseFloat(item.number) || 0;
+              }
+              label = item.detail;
+            } else {
+              value = Number(item.value) || 0;
+              suffix = item.suffix || "";
+              label = item.title || item.label;
+            }
+
             return (
               <motion.div
                 key={index}
@@ -76,10 +105,10 @@ export function AchievementsSection({ data }: { data?: any }) {
                   <IconComponent size={28} />
                 </div>
                 <div className="text-4xl md:text-5xl font-heading font-bold text-foreground mb-2 flex items-center">
-                  <Counter from={0} to={Number(item.value) || 0} />
-                  <span className="text-primary-accent">{item.suffix}</span>
+                  <Counter from={0} to={value} />
+                  <span className="text-primary-accent">{suffix}</span>
                 </div>
-                <p className="text-muted-foreground font-medium">{item.title || item.label}</p>
+                <p className="text-muted-foreground font-medium">{label}</p>
               </motion.div>
             );
           })}

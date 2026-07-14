@@ -8,6 +8,8 @@ use Filament\Forms\Contracts\HasForms;
 use App\Models\ProjectSection;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Tabs;
+use Filament\Forms\Components\Repeater;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Schemas\Schema;
@@ -40,18 +42,48 @@ class ProjectSettings extends Page implements HasForms
     {
         return $schema
             ->schema([
-                Section::make('Section Header')
-                    ->description('Edit the title and subtitle of the Projects section.')
-                    ->schema([
-                        TextInput::make('title')
-                            ->label('Section Title')
-                            ->placeholder('e.g., Featured Work'),
-                        TextInput::make('subtitle')
-                            ->label('Section Subtitle')
-                            ->placeholder('e.g., A selection of my best projects...')
-                            ->maxLength(255)
-                            ->columnSpanFull(),
+                Tabs::make('ProjectSettingsTabs')
+                    ->tabs([
+                        Tabs\Tab::make('Header Settings')
+                            ->schema([
+                                Section::make('Section Header')
+                                    ->description('Edit the title and subtitle of the Projects section.')
+                                    ->schema([
+                                        TextInput::make('title')
+                                            ->label('Section Title')
+                                            ->placeholder('e.g., Featured Work'),
+                                        TextInput::make('subtitle')
+                                            ->label('Section Subtitle')
+                                            ->placeholder('e.g., A selection of my best projects...')
+                                            ->maxLength(255)
+                                            ->columnSpanFull(),
+                                    ])
+                            ]),
+                        Tabs\Tab::make('Stats')
+                            ->schema([
+                                Section::make('Project Stats')
+                                    ->description('Add numbers and details to display in the stats section.')
+                                    ->schema([
+                                        Repeater::make('stats')
+                                            ->label('Statistics')
+                                            ->schema([
+                                                TextInput::make('number')
+                                                    ->label('Number')
+                                                    ->placeholder('e.g., 12+')
+                                                    ->required(),
+                                                TextInput::make('detail')
+                                                    ->label('Detail')
+                                                    ->placeholder('e.g., Awards Won')
+                                                    ->required(),
+                                            ])
+                                            ->columns(2)
+                                            ->defaultItems(4)
+                                            ->addActionLabel('Add Stat')
+                                            ->columnSpanFull(),
+                                    ])
+                            ]),
                     ])
+                    ->columnSpanFull()
             ])
             ->statePath('data');
     }
