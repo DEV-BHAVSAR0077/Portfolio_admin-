@@ -18,6 +18,7 @@ use App\Models\GlobalSetting;
 
 use App\Models\ExperienceSection;
 use App\Models\ProjectSection;
+use App\Models\SkillSection;
 
 class PortfolioController extends BaseController
 {
@@ -38,7 +39,7 @@ class PortfolioController extends BaseController
             'testimonials' => Testimonial::where('is_active', true)->orderBy('display_order')->get(),
             'social_media' => SocialMedia::where('is_active', true)->orderBy('display_order')->get(),
             'settings' => GlobalSetting::first(),
-            'skill_section' => \App\Models\SkillSection::first(),
+            'skill_section' => SkillSection::first(),
         ];
 
         return $this->sendResponse($data, 'Portfolio data retrieved successfully.');
