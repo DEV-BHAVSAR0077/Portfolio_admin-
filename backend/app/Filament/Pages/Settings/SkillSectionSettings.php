@@ -19,6 +19,8 @@ class SkillSectionSettings extends Page implements HasForms
     use InteractsWithForms;
 
     protected static \UnitEnum|string|null $navigationGroup = 'Skills';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-wrench';
+    protected static ?string $navigationLabel = 'Technical Section';
     protected static ?string $title = 'Technical Section';
     protected string $view = 'filament.pages.settings.skill-section-settings';
     

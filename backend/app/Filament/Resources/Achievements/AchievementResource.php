@@ -19,7 +19,7 @@ class AchievementResource extends Resource
     protected static \UnitEnum|string|null $navigationGroup = 'Skills';
     protected static ?string $model = Achievement::class;
 
-    protected static \BackedEnum|string|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-trophy';
 
     protected static ?string $recordTitleAttribute = 'title';
 

@@ -20,6 +20,8 @@ class AboutSectionSettings extends Page implements HasForms
     use InteractsWithForms;
 
     protected static \UnitEnum|string|null $navigationGroup = 'About';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-user';
+    protected static ?string $navigationLabel = 'About Section Settings';
     protected string $view = 'filament.pages.settings.about-section-settings';
     
     public ?array $data = [];

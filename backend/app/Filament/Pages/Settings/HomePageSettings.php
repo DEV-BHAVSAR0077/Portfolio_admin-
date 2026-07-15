@@ -22,6 +22,8 @@ class HomePageSettings extends Page implements HasForms
     use InteractsWithForms;
 
     protected static \UnitEnum|string|null $navigationGroup = 'Home';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-home';
+    protected static ?string $navigationLabel = 'Home Page Settings';
     protected string $view = 'filament.pages.settings.home-page-settings';
     
     public ?array $data = [];

@@ -17,6 +17,8 @@ class GlobalSettings extends Page implements HasForms
     use InteractsWithForms;
 
     protected static \UnitEnum|string|null $navigationGroup = 'Contact';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-globe-alt';
+    protected static ?string $navigationLabel = 'Global Settings';
     protected string $view = 'filament.pages.settings.home-page-settings'; // using default view to render form
     
     public ?array $data = [];

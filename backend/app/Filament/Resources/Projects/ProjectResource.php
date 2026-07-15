@@ -16,10 +16,10 @@ use Filament\Tables\Table;
 
 class ProjectResource extends Resource
 {
-    protected static \UnitEnum|string|null $navigationGroup = 'Project';
+    protected static \UnitEnum|string|null $navigationGroup = 'Projects';
     protected static ?string $model = Project::class;
 
-    protected static \BackedEnum|string|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-folder-open';
 
     protected static ?string $recordTitleAttribute = 'name';
 

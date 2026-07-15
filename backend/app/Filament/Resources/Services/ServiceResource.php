@@ -16,10 +16,10 @@ use Filament\Tables\Table;
 
 class ServiceResource extends Resource
 {
-    protected static \UnitEnum|string|null $navigationGroup = 'Project';
+    protected static \UnitEnum|string|null $navigationGroup = 'Projects';
     protected static ?string $model = Service::class;
 
-    protected static \BackedEnum|string|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-sparkles';
 
     protected static ?string $recordTitleAttribute = 'title';
 

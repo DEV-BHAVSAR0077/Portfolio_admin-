@@ -19,7 +19,7 @@ class ProjectSettings extends Page implements HasForms
     use InteractsWithForms;
 
     protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-cog';
-    protected static string | \UnitEnum | null $navigationGroup = 'Project';
+    protected static string | \UnitEnum | null $navigationGroup = 'Projects';
     protected static ?string $navigationLabel = 'Project Settings';
     protected static ?string $title = 'Project Section Settings';
     protected static ?string $slug = 'project-settings';

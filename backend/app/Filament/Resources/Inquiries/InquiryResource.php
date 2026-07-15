@@ -20,11 +20,11 @@ class InquiryResource extends Resource
 {
     protected static ?string $model = Inquiry::class;
 
-    protected static \UnitEnum|string|null $navigationGroup = 'Contacts';
+    protected static \UnitEnum|string|null $navigationGroup = 'Contact';
     
     protected static ?string $modelLabel = 'Inquiry';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-envelope';
 
     protected static ?string $recordTitleAttribute = 'subject';
 

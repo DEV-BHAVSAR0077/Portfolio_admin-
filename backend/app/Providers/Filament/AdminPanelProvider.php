@@ -28,8 +28,18 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->brandLogo(fn () => view('filament.logo'))
+            ->darkMode(true)
             ->colors([
                 'primary' => Color::Amber,
+            ])
+            ->navigationGroups([
+                'Home',
+                'About',
+                'Projects',
+                'Skills',
+                'Experience',
+                'Contact',
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')

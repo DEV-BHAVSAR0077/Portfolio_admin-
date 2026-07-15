@@ -19,7 +19,7 @@ class SkillResource extends Resource
     protected static \UnitEnum|string|null $navigationGroup = 'Skills';
     protected static ?string $model = Skill::class;
 
-    protected static \BackedEnum|string|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-check-badge';
 
     protected static ?string $recordTitleAttribute = 'name';
 

@@ -16,10 +16,10 @@ use Filament\Tables\Table;
 
 class BlogResource extends Resource
 {
-    protected static \UnitEnum|string|null $navigationGroup = 'Project';
+    protected static \UnitEnum|string|null $navigationGroup = 'Projects';
     protected static ?string $model = Blog::class;
 
-    protected static \BackedEnum|string|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-document-text';
 
     public static function form(Schema $schema): Schema
     {

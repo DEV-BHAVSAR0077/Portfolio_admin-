@@ -20,7 +20,7 @@ class SocialMediaResource extends Resource
     protected static bool $shouldRegisterNavigation = false;
     protected static ?string $model = SocialMedia::class;
 
-    protected static \BackedEnum|string|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-share';
 
     public static function form(Schema $schema): Schema
     {
