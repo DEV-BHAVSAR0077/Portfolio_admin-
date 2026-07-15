@@ -1,26 +1,27 @@
 import Link from "next/link";
 import { Terminal, Briefcase, Hash, Mail, ArrowUp, Globe, Camera, MessageSquare } from "lucide-react";
 
-export function Footer({ settings, socialMedia }: { settings?: any, socialMedia?: any[] }) {
+export function Footer({ settings, socialMedia, homeData }: { settings?: any, socialMedia?: any[], homeData?: any }) {
   
-  const getSocialIcon = (platform: string) => {
-    switch (platform?.toLowerCase()) {
-      case 'github': return Terminal;
-      case 'linkedin': return Briefcase;
-      case 'twitter': return Hash;
-      case 'x': return Hash;
-      case 'youtube': return Camera;
-      case 'facebook': return MessageSquare;
-      case 'instagram': return Camera;
+  const socialLinks = homeData?.social_links || [
+    { name: 'GitHub', icon: 'Terminal', href: "https://github.com/devbhavsar0077" },
+    { name: 'LinkedIn', icon: 'Briefcase', href: "https://linkedin.com/in/devbhavsar" },
+    { name: 'X / Twitter', icon: 'Hash', href: "https://twitter.com/devbhavsar" },
+    { name: 'Email Me', icon: 'Mail', href: "https://mail.google.com/mail/?view=cm&fs=1&to=contact@devbhavsar.com" },
+  ];
+
+  const getIcon = (iconName: string) => {
+    switch (iconName) {
+      case 'Terminal': return Terminal;
+      case 'Briefcase': return Briefcase;
+      case 'Hash': return Hash;
+      case 'Mail': return Mail;
+      case 'Globe': return Globe;
+      case 'Camera': return Camera;
+      case 'MessageSquare': return MessageSquare;
       default: return Globe;
     }
   };
-
-  const socials = socialMedia && socialMedia.length > 0 ? socialMedia : [
-    { platform: 'github', url: 'https://github.com/devbhavsar0077' },
-    { platform: 'linkedin', url: 'https://linkedin.com/in/devbhavsar' },
-    { platform: 'twitter', url: 'https://twitter.com/devbhavsar' },
-  ];
 
   return (
     <footer className="relative border-t border-foreground/10 bg-background overflow-hidden pt-16 pb-8">
@@ -31,25 +32,30 @@ export function Footer({ settings, socialMedia }: { settings?: any, socialMedia?
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
           <div className="md:col-span-2">
             <Link href="/" className="inline-block mb-6">
-              <span className="text-2xl font-heading font-bold text-foreground">
+              <span className="text-3xl font-heading font-bold text-foreground">
                 {settings?.site_name?.split(' ')[0] || 'DEV'}<span className="text-primary-accent">.</span>
               </span>
             </Link>
             <p className="text-muted-foreground max-w-md mb-8">
-              {settings?.site_description || "Building AI-Powered Applications, Intelligent Automations, and Scalable Full-Stack Products. Turning ideas into production-ready software."}
+              {homeData?.footer_description || settings?.site_description || "Building AI-Powered Applications, Intelligent Automations, and Scalable Full-Stack Products. Turning ideas into production-ready software."}
             </p>
-            <div className="flex gap-4">
-              {socials.map((social, idx) => {
-                const IconComponent = getSocialIcon(social.platform);
+            <div className="flex flex-wrap gap-4">
+              {socialLinks.map((social: any, i: number) => {
+                const IconComponent = getIcon(social.icon);
                 return (
-                  <a key={idx} href={(social.url?.includes('@') && !social.url?.startsWith('http')) ? `https://mail.google.com/mail/?view=cm&fs=1&to=${social.url.replace('mailto:', '')}` : social.url} target="_blank" rel="noreferrer" className="p-2 rounded-full bg-foreground/5 hover:bg-foreground/10 text-foreground transition-colors">
+                  <a
+                    key={i}
+                    href={(social.href?.includes('@') && !social.href?.startsWith('http')) ? `https://mail.google.com/mail/?view=cm&fs=1&to=${social.href.replace('mailto:', '')}` : social.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    title={social.name || ""}
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-foreground/5 border border-foreground/10 text-muted-foreground hover:text-primary-accent hover:border-primary-accent/50 hover:bg-primary-accent/10 transition-all duration-300"
+                  >
                     <IconComponent size={20} />
+                    {social.name && <span className="text-sm font-medium">{social.name}</span>}
                   </a>
                 );
               })}
-              <a href={`https://mail.google.com/mail/?view=cm&fs=1&to=${settings?.contact_email || 'contact@devbhavsar.com'}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-foreground/5 hover:bg-foreground/10 text-foreground transition-colors">
-                <Mail size={20} />
-              </a>
             </div>
           </div>
           
@@ -59,7 +65,7 @@ export function Footer({ settings, socialMedia }: { settings?: any, socialMedia?
               <li><Link href="#about" className="text-muted-foreground hover:text-primary-accent transition-colors">About</Link></li>
               <li><Link href="#skills" className="text-muted-foreground hover:text-primary-accent transition-colors">Skills</Link></li>
               <li><Link href="#projects" className="text-muted-foreground hover:text-primary-accent transition-colors">Projects</Link></li>
-              <li><Link href="#blog" className="text-muted-foreground hover:text-primary-accent transition-colors">Blog</Link></li>
+              <li><Link href="#experience" className="text-muted-foreground hover:text-primary-accent transition-colors">Experience</Link></li>
             </ul>
           </div>
           

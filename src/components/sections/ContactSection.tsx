@@ -5,8 +5,8 @@ import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import emailjs from "@emailjs/browser";
 import { MapPin, Mail, Phone, Send, Loader2 } from "lucide-react";
+import { submitInquiry } from "@/lib/api";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
@@ -33,25 +33,17 @@ export function ContactSection({ settings, socialMedia }: { settings?: any, soci
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     try {
-      // Setup EmailJS account and replace these placeholders in production
-      await emailjs.send(
-        "service_placeholder", // YOUR_SERVICE_ID
-        "template_placeholder", // YOUR_TEMPLATE_ID
-        {
-          from_name: data.name,
-          reply_to: data.email,
-          subject: data.subject,
-          message: data.message,
-        },
-        "public_key_placeholder" // YOUR_PUBLIC_KEY
-      );
+      await submitInquiry({
+        name: data.name,
+        email: data.email,
+        subject: data.subject,
+        message: data.message,
+      });
       setSubmitStatus("success");
       reset();
     } catch (error) {
       console.error(error);
-      // For demo purposes, we'll show success even if the API fails due to placeholders
-      setSubmitStatus("success");
-      reset();
+      setSubmitStatus("error");
     } finally {
       setIsSubmitting(false);
       setTimeout(() => setSubmitStatus("idle"), 5000);
@@ -221,6 +213,11 @@ export function ContactSection({ settings, socialMedia }: { settings?: any, soci
                 {submitStatus === "success" && (
                   <p className="text-center text-success mt-4 bg-success/10 py-2 rounded-lg border border-success/20">
                     Message sent successfully! I'll get back to you soon.
+                  </p>
+                )}
+                {submitStatus === "error" && (
+                  <p className="text-center text-destructive mt-4 bg-destructive/10 py-2 rounded-lg border border-destructive/20">
+                    Failed to send message. Please try again later.
                   </p>
                 )}
               </form>

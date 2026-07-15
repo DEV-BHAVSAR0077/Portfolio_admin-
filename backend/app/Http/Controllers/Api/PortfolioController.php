@@ -19,6 +19,7 @@ use App\Models\GlobalSetting;
 use App\Models\ExperienceSection;
 use App\Models\ProjectSection;
 use App\Models\SkillSection;
+use App\Models\Inquiry;
 
 class PortfolioController extends BaseController
 {
@@ -75,5 +76,25 @@ class PortfolioController extends BaseController
             }
         }
         return response()->json(['error' => 'Resume not found'], 404);
+    }
+
+    public function submitInquiry(\Illuminate\Http\Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string',
+        ]);
+
+        $inquiry = Inquiry::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'subject' => $validated['subject'],
+            'message' => $validated['message'],
+            'status' => 'new',
+        ]);
+
+        return $this->sendResponse($inquiry, 'Inquiry submitted successfully.');
     }
 }

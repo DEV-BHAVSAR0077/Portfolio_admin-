@@ -50,7 +50,7 @@ export function Navbar({ settings, socialMedia, home }: { settings?: any, social
         }`}>
           {/* Logo */}
           <Link href="/" className="group relative z-10">
-            <span className="text-xl font-heading font-bold tracking-tighter text-foreground">
+            <span className="text-3xl font-heading font-bold tracking-tighter text-foreground">
               {settings?.site_name?.split(' ')[0] || 'DEV'}<span className="text-primary-accent">.</span>
             </span>
           </Link>
@@ -61,7 +61,7 @@ export function Navbar({ settings, socialMedia, home }: { settings?: any, social
               <Link
                 key={link.name}
                 href={link.href}
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                className="text-lg font-medium text-muted-foreground hover:text-foreground transition-colors"
               >
                 {link.name}
               </Link>
@@ -80,7 +80,7 @@ export function Navbar({ settings, socialMedia, home }: { settings?: any, social
             <a
               href={home?.resume ? getResumeDownloadUrl() : (settings?.resume_link || "#contact")}
               download
-              className="hidden md:inline-flex items-center justify-center rounded-full bg-primary-accent/10 px-6 py-2 text-sm font-medium text-primary-accent ring-1 ring-inset ring-primary-accent/20 hover:bg-primary-accent/20 transition-all"
+              className="hidden md:inline-flex items-center justify-center rounded-full bg-primary-accent/10 px-6 py-2 text-lg font-medium text-primary-accent ring-1 ring-inset ring-primary-accent/20 hover:bg-primary-accent/20 transition-all"
             >
               Resume
             </a>

@@ -65,6 +65,16 @@ class HomePageSettings extends Page implements HasForms
                             ->default(true),
                     ]),
                     
+                Section::make('Footer Content')
+                    ->description('Edit the text shown in the footer of your portfolio.')
+                    ->schema([
+                        Textarea::make('footer_description')
+                            ->label('Footer Description')
+                            ->placeholder('e.g., Building AI-Powered Applications, Intelligent Automations, and Scalable Full-Stack Products.')
+                            ->rows(3)
+                            ->maxLength(1000),
+                    ]),
+                    
                 Section::make('Resume')
                     ->description('Upload your resume as a PDF file.')
                     ->schema([

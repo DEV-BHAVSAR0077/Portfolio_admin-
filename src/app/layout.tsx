@@ -62,7 +62,7 @@ export default async function RootLayout({
           <ScrollIndicator />
           <Navbar settings={settingsData} socialMedia={socialMediaData} home={homeData} />
           <main className="flex-1 flex flex-col relative">{children}</main>
-          <Footer settings={settingsData} socialMedia={socialMediaData} />
+          <Footer settings={settingsData} socialMedia={socialMediaData} homeData={homeData} />
         </SmoothScrollProvider>
       </body>
     </html>

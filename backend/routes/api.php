@@ -16,3 +16,4 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::get('/resume/download', [PortfolioController::class, 'downloadResume']);
+Route::post('/inquiry', [PortfolioController::class, 'submitInquiry']);

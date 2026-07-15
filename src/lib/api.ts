@@ -35,3 +35,23 @@ export function getResumeDownloadUrl() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8001/api';
   return `${apiUrl}/resume/download`;
 }
+
+export async function submitInquiry(data: { name: string; email: string; subject: string; message: string }) {
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8001/api';
+  
+  const res = await fetch(`${apiUrl}/inquiry`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    throw new Error('Failed to submit inquiry');
+  }
+
+  const json = await res.json();
+  return json.data;
+}
