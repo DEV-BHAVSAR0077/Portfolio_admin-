@@ -5,14 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Models\HomePage;
 use App\Models\AboutSection;
 use App\Models\Skill;
-use App\Models\Experience;
-use App\Models\Education;
 use App\Models\Project;
 use App\Models\Service;
 use App\Models\Achievement;
-use App\Models\Certificate;
 use App\Models\Blog;
-use App\Models\Testimonial;
 use App\Models\SocialMedia;
 use App\Models\GlobalSetting;
 
@@ -29,15 +25,11 @@ class PortfolioController extends BaseController
             'home' => HomePage::first(),
             'about' => AboutSection::first(),
             'skills' => Skill::where('is_active', true)->orderBy('display_order')->get(),
-            'experiences' => Experience::orderBy('display_order')->get(), // Keep for backwards compatibility if needed
-            'education' => Education::orderBy('display_order')->get(), // Keep for backwards compatibility if needed
             'experience_section' => ExperienceSection::first(),
             'project_section' => ProjectSection::first(),
             'projects' => Project::orderBy('display_order')->get(),
             'services' => Service::where('is_active', true)->orderBy('display_order')->get(),
             'achievements' => Achievement::orderBy('display_order')->get(),
-            'certificates' => Certificate::orderBy('display_order')->get(),
-            'testimonials' => Testimonial::where('is_active', true)->orderBy('display_order')->get(),
             'social_media' => SocialMedia::where('is_active', true)->orderBy('display_order')->get(),
             'settings' => GlobalSetting::first(),
             'skill_section' => SkillSection::first(),
