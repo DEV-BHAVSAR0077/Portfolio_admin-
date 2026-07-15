@@ -28,6 +28,8 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->brandName('DEV.')
+            ->favicon(asset('favicon.svg'))
             ->brandLogo(fn () => view('filament.logo'))
             ->darkMode(true)
             ->colors([
