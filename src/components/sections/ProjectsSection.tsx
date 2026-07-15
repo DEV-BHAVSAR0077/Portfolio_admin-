@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { Terminal, ExternalLink, ArrowRight, Layers, ChevronLeft, ChevronRight } from "lucide-react";
 import { getImageUrl } from "@/lib/api";
+import DOMPurify from "isomorphic-dompurify";
 
 const flagshipProject = {
   title: "Dinely - Restaurant SaaS Platform",
@@ -93,7 +94,7 @@ export function ProjectsSection({ data, sectionData }: { data?: any, sectionData
         >
           <h2 className="text-3xl md:text-5xl font-heading font-bold text-foreground mb-4">
             {sectionData?.title ? (
-              <span dangerouslySetInnerHTML={{ __html: sectionData.title.replace('Work', '<span class="text-gradient">Work</span>').replace('Projects', '<span class="text-gradient">Projects</span>') }} />
+              <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(sectionData.title.replace('Work', '<span class="text-gradient">Work</span>').replace('Projects', '<span class="text-gradient">Projects</span>')) }} />
             ) : (
               <>Featured <span className="text-gradient">Work</span></>
             )}

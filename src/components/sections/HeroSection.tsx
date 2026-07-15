@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import { Download, ArrowRight, Terminal, Briefcase, Hash, Mail } from "lucide-react";
 import { getImageUrl, getResumeDownloadUrl } from "@/lib/api";
+import DOMPurify from "isomorphic-dompurify";
 
 const NeuralNetwork = dynamic(() => import("@/components/3d/NeuralNetwork").then(mod => mod.NeuralNetwork), { ssr: false });
 const Particles = dynamic(() => import("@/components/3d/Particles").then(mod => mod.Particles), { ssr: false });
@@ -100,10 +101,10 @@ export function HeroSection({ data }: { data?: any }) {
             transition={{ duration: 0.7, delay: 0.3 }}
             className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold tracking-tight mb-6"
             dangerouslySetInnerHTML={{
-                __html: heroTitle.replace(
+                __html: DOMPurify.sanitize(heroTitle.replace(
                   "Dev Bhavsar", 
                   "<span class=\"text-foreground\">Dev Bhavsar</span>"
-                ) + `<br /><span class="text-gradient">${heroSubtitle}</span>`
+                ) + `<br /><span class="text-gradient">${heroSubtitle}</span>`)
             }}
           />
 

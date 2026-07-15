@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
 import { Briefcase, GraduationCap, Calendar, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useScrollLock } from "@/hooks/useScrollLock";
 import { getImageUrl } from "@/lib/api";
+import DOMPurify from "isomorphic-dompurify";
 
 const experienceData = [
   {
@@ -225,7 +226,7 @@ export function ExperienceSection({ data }: { data?: any }) {
                 {selectedItem.details && (
                   <div 
                     className="prose prose-invert prose-cyan max-w-none prose-p:text-foreground/80 prose-headings:text-foreground prose-a:text-primary-accent hover:prose-a:text-primary-accent/80"
-                    dangerouslySetInnerHTML={{ __html: selectedItem.details }}
+                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(selectedItem.details) }}
                   />
                 )}
                 {!selectedItem.details && selectedItem.description && (

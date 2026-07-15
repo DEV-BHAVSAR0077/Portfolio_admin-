@@ -8,12 +8,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
-
-    Route::get('/portfolio', [PortfolioController::class, 'index']);
-    Route::get('/blogs', [PortfolioController::class, 'blogs']);
-    Route::get('/blogs/{slug}', [PortfolioController::class, 'blog']);
-    Route::get('/projects/{slug}', [PortfolioController::class, 'project']);
 });
 
+Route::get('/portfolio', [PortfolioController::class, 'index']);
+Route::get('/blogs', [PortfolioController::class, 'blogs']);
+Route::get('/blogs/{slug}', [PortfolioController::class, 'blog']);
+Route::get('/projects/{slug}', [PortfolioController::class, 'project']);
+
 Route::get('/resume/download', [PortfolioController::class, 'downloadResume']);
-Route::post('/inquiry', [PortfolioController::class, 'submitInquiry']);
+Route::post('/inquiry', [PortfolioController::class, 'submitInquiry'])->middleware('throttle:5,1');
