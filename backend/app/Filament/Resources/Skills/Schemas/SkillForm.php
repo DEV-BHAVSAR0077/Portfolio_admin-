@@ -6,6 +6,8 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\FileUpload;
 
 class SkillForm
 {
@@ -16,7 +18,7 @@ class SkillForm
                 TextInput::make('name')
                     ->required(),
                 TextInput::make('category'),
-                \Filament\Forms\Components\Select::make('color')
+                Select::make('color')
                     ->options([
                         'red' => 'Red',
                         'blue' => 'Blue',
@@ -29,7 +31,7 @@ class SkillForm
                         'brown' => 'Brown',
                     ])
                     ->label('Pill Color'),
-                \Filament\Forms\Components\FileUpload::make('certificates')
+                FileUpload::make('certificates')
                     ->multiple()
                     ->acceptedFileTypes(['image/*', 'application/pdf'])
                     ->disk('public')

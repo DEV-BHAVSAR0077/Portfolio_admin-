@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Inquiries\Schemas;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
+use Filament\Forms\Components\Select;
 
 class InquiryForm
 {
@@ -27,7 +28,7 @@ class InquiryForm
                     ->disabled()
                     ->required()
                     ->columnSpanFull(),
-                \Filament\Forms\Components\Select::make('status')
+                Select::make('status')
                     ->options([
                         'new' => 'New',
                         'read' => 'Read',

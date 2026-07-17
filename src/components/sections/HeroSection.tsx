@@ -1,16 +1,16 @@
 "use client";
 
 import { useRef } from "react";
-import { Canvas } from "@react-three/fiber";
-import { Environment, OrbitControls } from "@react-three/drei";
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import { Download, ArrowRight, Terminal, Briefcase, Hash, Mail } from "lucide-react";
 import { getImageUrl, getResumeDownloadUrl } from "@/lib/api";
 import DOMPurify from "isomorphic-dompurify";
 
-const NeuralNetwork = dynamic(() => import("@/components/3d/NeuralNetwork").then(mod => mod.NeuralNetwork), { ssr: false });
-const Particles = dynamic(() => import("@/components/3d/Particles").then(mod => mod.Particles), { ssr: false });
+const Hero3DBackground = dynamic(
+  () => import("@/components/3d/Hero3DBackground").then(mod => mod.Hero3DBackground), 
+  { ssr: false }
+);
 
 export function HeroSection({ data }: { data?: any }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -53,20 +53,7 @@ export function HeroSection({ data }: { data?: any }) {
     >
       {/* 3D Background */}
       <div className="absolute inset-0 z-0 opacity-60">
-        <Canvas camera={{ position: [0, 0, 8], fov: 45 }} dpr={[1, 1.5]}>
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} intensity={1} />
-          <NeuralNetwork />
-          <Particles count={150} />
-          <OrbitControls 
-            enableZoom={false} 
-            enablePan={false}
-            autoRotate
-            autoRotateSpeed={0.5}
-            maxPolarAngle={Math.PI / 2 + 0.2}
-            minPolarAngle={Math.PI / 2 - 0.2}
-          />
-        </Canvas>
+        <Hero3DBackground />
       </div>
 
       {/* Decorative Gradients */}
@@ -95,10 +82,7 @@ export function HeroSection({ data }: { data?: any }) {
             )}
           </motion.div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
+          <h1
             className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold tracking-tight mb-6"
             dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(heroTitle.replace(

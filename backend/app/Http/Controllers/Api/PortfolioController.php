@@ -11,7 +11,7 @@ use App\Models\Achievement;
 use App\Models\Blog;
 use App\Models\SocialMedia;
 use App\Models\GlobalSetting;
-
+use Illuminate\Http\Request;
 use App\Models\ExperienceSection;
 use App\Models\ProjectSection;
 use App\Models\SkillSection;
@@ -70,7 +70,7 @@ class PortfolioController extends BaseController
         return response()->json(['error' => 'Resume not found'], 404);
     }
 
-    public function submitInquiry(\Illuminate\Http\Request $request)
+    public function submitInquiry(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',

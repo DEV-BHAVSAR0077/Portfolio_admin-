@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\SkillSection;
 
 class Skill extends Model
 {
@@ -15,11 +16,11 @@ class Skill extends Model
     protected static function booted()
     {
         static::saved(function ($skill) {
-            \App\Models\SkillSection::syncFromSkills();
+            SkillSection::syncFromSkills();
         });
 
         static::deleted(function ($skill) {
-            \App\Models\SkillSection::syncFromSkills();
+            SkillSection::syncFromSkills();
         });
     }
 }

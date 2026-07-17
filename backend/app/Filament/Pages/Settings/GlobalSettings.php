@@ -9,6 +9,8 @@ use App\Models\GlobalSetting;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Actions\Action;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Textarea;
 use Filament\Notifications\Notification;
 use Filament\Schemas\Schema;
 
@@ -49,11 +51,11 @@ class GlobalSettings extends Page implements HasForms
                 Section::make('Contact Information')
                     ->description('Edit the content displayed in the Contact Information section.')
                     ->schema([
-                        \Filament\Forms\Components\Toggle::make('is_available')
+                        Toggle::make('is_available')
                             ->label('Available for Hire')
                             ->default(true)
                             ->columnSpanFull(),
-                        \Filament\Forms\Components\Textarea::make('contact_info_text')
+                        Textarea::make('contact_info_text')
                             ->label('Contact Info Description')
                             ->placeholder("e.g., I'm currently open for new opportunities...")
                             ->columnSpanFull(),

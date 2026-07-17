@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Skill;
 
 class SkillSection extends Model
 {
@@ -22,7 +23,7 @@ class SkillSection extends Model
             $section = self::create([]);
         }
 
-        $skills = \App\Models\Skill::orderBy('display_order')->get();
+        $skills = Skill::orderBy('display_order')->get();
         $grouped = [];
         foreach ($skills as $skill) {
             $cat = $skill->category ?: 'Other';
@@ -76,7 +77,7 @@ class SkillSection extends Model
             if (!$category) continue;
 
             foreach ($skills as $skillName) {
-                $skill = \App\Models\Skill::firstOrCreate([
+                $skill = Skill::firstOrCreate([
                     'name' => $skillName,
                     'category' => $category,
                 ]);
@@ -88,6 +89,6 @@ class SkillSection extends Model
             }
         }
         
-        \App\Models\Skill::whereNotIn('id', $activeIds)->delete();
+        Skill::whereNotIn('id', $activeIds)->delete();
     }
 }

@@ -13,7 +13,6 @@ use App\Models\Inquiry;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 
 class InquiryResource extends Resource

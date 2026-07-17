@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Inquiries\Pages;
 use App\Filament\Resources\Inquiries\InquiryResource;
 use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Actions\Action;
 
 class ViewInquiry extends ViewRecord
 {
@@ -13,7 +14,7 @@ class ViewInquiry extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            \Filament\Actions\Action::make('back')
+            Action::make('back')
                 ->label('Back')
                 ->url(fn () => url()->previous() !== url()->current() ? url()->previous() : InquiryResource::getUrl('index'))
                 ->color('gray')

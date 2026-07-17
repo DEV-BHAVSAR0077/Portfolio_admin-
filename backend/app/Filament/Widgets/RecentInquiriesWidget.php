@@ -5,9 +5,9 @@ namespace App\Filament\Widgets;
 use App\Filament\Resources\Inquiries\InquiryResource;
 use App\Models\Inquiry;
 use Filament\Actions\Action;
-use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
+use Filament\Tables\Columns\TextColumn;
 
 class RecentInquiriesWidget extends BaseWidget
 {
@@ -22,13 +22,13 @@ class RecentInquiriesWidget extends BaseWidget
                 Inquiry::query()->latest()->limit(5)
             )
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('subject')
+                TextColumn::make('subject')
                     ->searchable()
                     ->limit(50),
-                Tables\Columns\TextColumn::make('status')
+                TextColumn::make('status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'new' => 'danger',
@@ -36,7 +36,7 @@ class RecentInquiriesWidget extends BaseWidget
                         'responded' => 'success',
                         default => 'gray',
                     }),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->label('Date Received'),

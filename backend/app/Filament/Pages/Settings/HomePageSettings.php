@@ -7,6 +7,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 // use Filament\Forms\Form;
 use App\Models\HomePage;
+use Filament\Schemas\Schema;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\TextInput;
@@ -36,7 +37,7 @@ class HomePageSettings extends Page implements HasForms
         }
     }
     
-    public function form(\Filament\Schemas\Schema $form): \Filament\Schemas\Schema
+    public function form(Schema $form): Schema
     {
         return $form
             ->schema([

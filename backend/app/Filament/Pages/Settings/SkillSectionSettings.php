@@ -12,6 +12,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TagsInput;
 use Filament\Forms\Components\Repeater;
 use Filament\Actions\Action;
+use Filament\Schemas\Schema;
 use Filament\Notifications\Notification;
 
 class SkillSectionSettings extends Page implements HasForms
@@ -36,7 +37,7 @@ class SkillSectionSettings extends Page implements HasForms
         }
     }
     
-    public function form(\Filament\Schemas\Schema $form): \Filament\Schemas\Schema
+    public function form(Schema $form): Schema
     {
         return $form
             ->schema([

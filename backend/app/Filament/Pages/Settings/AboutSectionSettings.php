@@ -12,6 +12,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TagsInput;
+use Filament\Schemas\Schema;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 
@@ -34,7 +35,7 @@ class AboutSectionSettings extends Page implements HasForms
         }
     }
     
-    public function form(\Filament\Schemas\Schema $form): \Filament\Schemas\Schema
+    public function form(Schema $form): Schema
     {
         return $form
             ->schema([
