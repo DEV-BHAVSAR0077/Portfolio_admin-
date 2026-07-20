@@ -167,7 +167,7 @@ export function AboutSection({ data }: { data?: any }) {
               const { Icon, color, bg } = getIconConfig(card.title);
               return (
                 <div key={i} className="col-span-1">
-                  <div className="glass-panel p-8 rounded-3xl border border-foreground/10 bg-foreground/5 relative overflow-hidden">
+                  <div className="glass-panel p-8 rounded-3xl relative overflow-hidden h-full">
                     <div className={`absolute -right-10 -top-10 w-40 h-40 ${bg}/20 rounded-full blur-[60px]`} />
                     
                     <h3 className="text-2xl font-heading font-bold text-foreground mb-6 flex items-center gap-3">

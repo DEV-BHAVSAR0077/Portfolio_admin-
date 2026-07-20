@@ -1,8 +1,15 @@
 "use client";
 
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+
+const COLOR_PALETTE = [
+  "#06B6D4", // Soft Cyan
+  "#6366F1", // Soft Indigo
+  "#A855F7", // Soft Purple
+  "#BAE6FD", // Very Light Blue
+];
 
 export function Particles({ count = 500 }) {
   const mesh = useRef<THREE.InstancedMesh>(null);
@@ -25,6 +32,19 @@ export function Particles({ count = 500 }) {
       temp.push({ x, y, z, factor, speed, xFactor, yFactor, zFactor });
     }
     return temp;
+  }, [count]);
+
+  useEffect(() => {
+    if (!mesh.current) return;
+    const tempColor = new THREE.Color();
+    for (let i = 0; i < count; i++) {
+      const colorHex = COLOR_PALETTE[Math.floor(Math.random() * COLOR_PALETTE.length)];
+      tempColor.set(colorHex);
+      mesh.current.setColorAt(i, tempColor);
+    }
+    if (mesh.current.instanceColor) {
+      mesh.current.instanceColor.needsUpdate = true;
+    }
   }, [count]);
 
   useFrame((state) => {
@@ -51,7 +71,7 @@ export function Particles({ count = 500 }) {
   return (
     <instancedMesh ref={mesh} args={[undefined, undefined, count]}>
       <sphereGeometry args={[0.02, 8, 8]} />
-      <meshBasicMaterial color="#ffffff" transparent opacity={0.3} />
+      <meshBasicMaterial color="#ffffff" transparent opacity={0.15} />
     </instancedMesh>
   );
 }
