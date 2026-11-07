@@ -6,6 +6,8 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { ScrollIndicator } from "@/components/ui/ScrollIndicator";
+import { fetchPortfolioData } from "@/lib/api";
+import { defaultPortfolioData } from "@/lib/defaultData";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -22,7 +24,7 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
 });
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Dev Bhavsar | AI Engineer & Full Stack Developer",
@@ -30,33 +32,33 @@ export const metadata: Metadata = {
   keywords: ["Dev Bhavsar", "AI Engineer", "Full Stack Developer", "Machine Learning", "Laravel", "React", "Next.js", "Portfolio"],
 };
 
-import { fetchPortfolioData } from "@/lib/api";
-
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  let settingsData = null;
-  let socialMediaData = [];
-  let homeData = null;
+  let settingsData = defaultPortfolioData.settings;
+  let socialMediaData = defaultPortfolioData.social_media;
+  let homeData = defaultPortfolioData.home;
+
   try {
     const data = await fetchPortfolioData();
     if (data) {
-      settingsData = data.settings;
-      socialMediaData = data.social_media || [];
-      homeData = data.home;
+      settingsData = data.settings || defaultPortfolioData.settings;
+      socialMediaData = data.social_media?.length ? data.social_media : defaultPortfolioData.social_media;
+      homeData = data.home || defaultPortfolioData.home;
     }
   } catch (error) {
-    console.error("Failed to fetch layout data", error);
+    console.warn("Using default layout data:", error);
   }
 
   return (
     <html
       lang="en"
       className={`dark ${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col font-sans relative">
+      <body className="min-h-full flex flex-col font-sans relative" suppressHydrationWarning>
         <SmoothScrollProvider>
           <CustomCursor />
           <ScrollIndicator />

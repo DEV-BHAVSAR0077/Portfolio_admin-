@@ -157,6 +157,7 @@ export function ContactSection({ settings, socialMedia }: { settings?: any, soci
                       id="name"
                       className="w-full bg-foreground/5 border border-foreground/10 rounded-xl px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-primary-accent/50 focus:border-transparent transition-all"
                       placeholder="John Doe"
+                      suppressHydrationWarning
                     />
                     {errors.name && <p className="mt-1 text-sm text-destructive">{errors.name.message}</p>}
                   </div>
@@ -168,6 +169,7 @@ export function ContactSection({ settings, socialMedia }: { settings?: any, soci
                       type="email"
                       className="w-full bg-foreground/5 border border-foreground/10 rounded-xl px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-primary-accent/50 focus:border-transparent transition-all"
                       placeholder="john@example.com"
+                      suppressHydrationWarning
                     />
                     {errors.email && <p className="mt-1 text-sm text-destructive">{errors.email.message}</p>}
                   </div>
@@ -180,6 +182,7 @@ export function ContactSection({ settings, socialMedia }: { settings?: any, soci
                     id="subject"
                     className="w-full bg-foreground/5 border border-foreground/10 rounded-xl px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-primary-accent/50 focus:border-transparent transition-all"
                     placeholder="Project Inquiry"
+                    suppressHydrationWarning
                   />
                   {errors.subject && <p className="mt-1 text-sm text-destructive">{errors.subject.message}</p>}
                 </div>
@@ -192,6 +195,7 @@ export function ContactSection({ settings, socialMedia }: { settings?: any, soci
                     rows={5}
                     className="w-full bg-foreground/5 border border-foreground/10 rounded-xl px-4 py-3 text-foreground focus:outline-none focus:ring-2 focus:ring-primary-accent/50 focus:border-transparent transition-all resize-none"
                     placeholder="Tell me about your project..."
+                    suppressHydrationWarning
                   />
                   {errors.message && <p className="mt-1 text-sm text-destructive">{errors.message.message}</p>}
                 </div>
@@ -200,6 +204,7 @@ export function ContactSection({ settings, socialMedia }: { settings?: any, soci
                   type="submit"
                   disabled={isSubmitting}
                   className="w-full bg-primary-accent text-background font-semibold py-4 rounded-xl hover:bg-foreground transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                  suppressHydrationWarning
                 >
                   {isSubmitting ? (
                     <Loader2 className="w-5 h-5 animate-spin" />

@@ -142,6 +142,7 @@ export function SkillsSection({ data, sectionData }: { data?: any, sectionData?:
                       key={skill}
                       onClick={() => skillObj && openSkillModal(skillObj)}
                       className={`px-3 py-1 text-sm font-medium rounded-full border transition-colors cursor-pointer ${colorClasses}`}
+                      suppressHydrationWarning
                     >
                       {skill}
                     </button>

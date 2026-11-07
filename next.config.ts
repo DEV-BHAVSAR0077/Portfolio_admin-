@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
         port: '8001',
         pathname: '/storage/**',
       },
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
     ],
   },
 };

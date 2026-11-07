@@ -111,6 +111,7 @@ export function ProjectsSection({ data, sectionData }: { data?: any, sectionData
             onClick={handlePrev}
             className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 md:-translate-x-6 z-20 p-3 rounded-full bg-background border border-foreground/10 text-foreground shadow-xl hover:text-primary-accent hover:border-primary-accent transition-all hidden md:flex"
             aria-label="Previous project"
+            suppressHydrationWarning
           >
             <ChevronLeft size={24} />
           </button>
@@ -119,6 +120,7 @@ export function ProjectsSection({ data, sectionData }: { data?: any, sectionData
             onClick={handleNext}
             className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 md:translate-x-6 z-20 p-3 rounded-full bg-background border border-foreground/10 text-foreground shadow-xl hover:text-primary-accent hover:border-primary-accent transition-all hidden md:flex"
             aria-label="Next project"
+            suppressHydrationWarning
           >
             <ChevronRight size={24} />
           </button>

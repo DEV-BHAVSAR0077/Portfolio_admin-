@@ -7,15 +7,12 @@ import { ServicesSection } from "@/components/sections/ServicesSection";
 import { AchievementsSection } from "@/components/sections/AchievementsSection";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { fetchPortfolioData } from "@/lib/api";
+import { defaultPortfolioData } from "@/lib/defaultData";
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 export default async function Home() {
-  const data = await fetchPortfolioData();
-
-  if (!data) {
-    return <div className="min-h-screen flex items-center justify-center">Loading portfolio data or CMS is unavailable...</div>;
-  }
+  const data = (await fetchPortfolioData()) || defaultPortfolioData;
 
   return (
     <div className="w-full flex flex-col">
